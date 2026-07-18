@@ -1219,7 +1219,7 @@
             body: `
               <label class="checkbox-row">
                 <input id="termsCheck" type="checkbox" ${state.terms_accepted ? "checked" : ""}>
-                <span>I accept the <a href="https://vessi.com/pages/terms-conditions" target="_blank" rel="noopener">giveaway terms and conditions</a>.</span>
+                <span>I accept the <a href="${state.country === "canada" ? "https://ca.vessi.com/policies/terms-of-service" : "https://vessi.com/policies/terms-of-service"}" target="_blank" rel="noopener">giveaway terms and conditions</a>.</span>
               </label>
               <label class="checkbox-row">
                 <input id="marketingCheck" type="checkbox" ${state.marketing_consent ? "checked" : ""}>

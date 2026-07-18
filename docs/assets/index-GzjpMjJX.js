@@ -57,7 +57,7 @@
             `,actions:`${y("Continue","terms")}${y("Back","back","ghost")}`,onRendered(){["firstName","lastName","email","phone","smsOptIn"].forEach(e=>{document.getElementById(e)?.addEventListener("input",V),document.getElementById(e)?.addEventListener("change",V)})}}),z()},terms(){c({kicker:"Last step",title:"Accept the giveaway terms?",prompt:"By entering, you confirm that your information is accurate and that you meet the campaign eligibility requirements.",body:`
               <label class="checkbox-row">
                 <input id="termsCheck" type="checkbox" ${a.terms_accepted?"checked":""}>
-                <span>I accept the <a href="https://vessi.com/pages/terms-conditions" target="_blank" rel="noopener">giveaway terms and conditions</a>.</span>
+                <span>I accept the <a href="${a.country==="canada"?"https://ca.vessi.com/policies/terms-of-service":"https://vessi.com/policies/terms-of-service"}" target="_blank" rel="noopener">giveaway terms and conditions</a>.</span>
               </label>
               <label class="checkbox-row">
                 <input id="marketingCheck" type="checkbox" ${a.marketing_consent?"checked":""}>
