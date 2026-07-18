@@ -2,8 +2,10 @@
   "name": "vessi-bts-quiz",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "vite --host 0.0.0.0",
+    "test": "node --test",
     "build": "vite build"
   },
   "dependencies": {
