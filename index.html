@@ -723,7 +723,11 @@
       </section>
     </main>
 
-    <script>
+    <script type="module" src="./quiz-config.js"></script>
+    <script type="module">
+      import { createSheetsSync } from "./src/sheets-sync.js";
+      import { addAttributionToUrl, createInstrumentation } from "./src/instrumentation.js";
+
       const products = {
         classic: {
           name: "Weekend Classic",
@@ -760,26 +764,60 @@
         answers: {},
         tags: new Set(),
         profile: {},
-        contact: {}
+        contact: {},
+        marketing_consent: false,
+        consent_date: "",
+        terms_accepted: false,
+        entry_completed_at: ""
       };
 
       const hidden = Object.fromEntries(new URLSearchParams(location.search));
       const screen = document.getElementById("screen");
       const progressBar = document.getElementById("progressBar");
       const totalCoreSteps = 13;
+      const quizConfig = window.VESSI_QUIZ_CONFIG || {};
+      const syncEndpoint = quizConfig.googleSheetsEndpoint || import.meta.env.VITE_GOOGLE_SHEETS_ENDPOINT || "";
+      const quizSync = createSheetsSync({ endpoint: syncEndpoint, getSnapshot: () => state });
+      const analytics = createInstrumentation({
+        target: window,
+        config: quizConfig,
+        entry: quizSync.entry,
+        logger: location.hostname === "localhost" ? (name, properties) => console.log("[track]", name, properties) : null
+      });
+      analytics.initialize();
+      screen.addEventListener("click", (event) => {
+        const link = event.target.closest?.("[data-track]");
+        if (!link) return;
+        const product = state.step === "results" ? recommend() : null;
+        trackEvent("product_clicked", {
+          section: link.dataset.trackSection || "",
+          text: link.dataset.trackText || link.textContent.trim(),
+          recommended_product: product?.name || "",
+          intent_bucket: state.role ? intentBucket() : ""
+        });
+        if (product) void analytics.persistCartAttribution({ role: state.role, recommendation: product.name, intent_bucket: intentBucket() });
+      });
 
-      function trackEvent(name, props = {}) {
-        const event = {
-          event: name,
-          timestamp: Date.now(),
+      function syncUpdate() {
+        quizSync.schedule();
+      }
+
+      function rebuildTags() {
+        state.tags = new Set(Object.values(state.answers).flatMap((answer) => answer.tags || []));
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>'"]/g, (character) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
+        })[character]);
+      }
+
+      function trackEvent(name, props = {}, options = {}) {
+        return analytics.track(name, {
           source: hidden.utm_source || "",
-          campaign: hidden.utm_campaign || "",
           affiliate_id: hidden.affiliate_id || "",
           ...props
-        };
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(event);
-        if (location.hostname === "localhost") console.log("[track]", event);
+        }, options);
       }
 
       function render({ kicker, title, prompt, options = [], body = "", actions = "", progress = null, onRendered = null }) {
@@ -813,16 +851,17 @@
 
       function choose(value, label, tagString) {
         const step = state.step;
-        state.answers[step] = { value, label };
-        (tagString || "").split(",").filter(Boolean).forEach((tag) => state.tags.add(tag));
-        trackEvent("question_answered", { question_id: step, answer: label, role: state.role });
+        Object.keys(state.answers).filter((key) => !state.path.includes(key)).forEach((key) => delete state.answers[key]);
+        state.answers[step] = { value, label, tags: (tagString || "").split(",").filter(Boolean) };
+        rebuildTags();
+        trackEvent("quiz_answered", { question_id: step, answer: label, role: state.role });
         goNext(value, label);
+        syncUpdate();
       }
 
       function pushStep(step) {
         state.step = step;
         state.path.push(step);
-        trackEvent("question_viewed", { question_id: step, role: state.role });
         routes[step]();
       }
 
@@ -874,7 +913,8 @@
           button.addEventListener("click", () => {
             const action = button.dataset.action;
             if (action === "start") {
-              trackEvent("quiz_started");
+              trackEvent("quiz_started", {}, { once: true });
+              syncUpdate();
               pushStep("role");
             }
             if (action === "school") pushStep("school");
@@ -888,9 +928,12 @@
       }
 
       function back() {
-        state.path.pop();
+        const current = state.path.pop();
+        delete state.answers[current];
+        rebuildTags();
         const previous = state.path.pop() || "welcome";
         pushStep(previous);
+        syncUpdate();
       }
 
       const routes = {
@@ -1113,12 +1156,18 @@
               <div class="form-grid">
                 <div class="field full">
                   <label for="schoolName">${label}</label>
-                  <input id="schoolName" name="schoolName" autocomplete="organization" required>
+                  <input id="schoolName" name="schoolName" autocomplete="organization" value="${escapeHtml(state.profile.school || "")}" required>
                 </div>
               </div>
               <p class="error" id="formError"></p>
             `,
-            actions: `${button("Continue", "contact")}${button("Back", "back", "ghost")}`
+            actions: `${button("Continue", "contact")}${button("Back", "back", "ghost")}`,
+            onRendered() {
+              document.getElementById("schoolName")?.addEventListener("input", (event) => {
+                state.profile.school = event.target.value;
+                syncUpdate();
+              });
+            }
           });
           attachActions();
         },
@@ -1131,28 +1180,34 @@
               <div class="form-grid">
                 <div class="field">
                   <label for="firstName">First name</label>
-                  <input id="firstName" name="firstName" autocomplete="given-name" required>
+                  <input id="firstName" name="firstName" autocomplete="given-name" value="${escapeHtml(state.contact.first || "")}" required>
                 </div>
                 <div class="field">
                   <label for="lastName">Last name</label>
-                  <input id="lastName" name="lastName" autocomplete="family-name" required>
+                  <input id="lastName" name="lastName" autocomplete="family-name" value="${escapeHtml(state.contact.last || "")}" required>
                 </div>
                 <div class="field full">
                   <label for="email">Email</label>
-                  <input id="email" name="email" type="email" autocomplete="email" required>
+                  <input id="email" name="email" type="email" autocomplete="email" value="${escapeHtml(state.contact.email || "")}" required>
                 </div>
                 <div class="field full">
                   <label for="phone">Phone, optional</label>
-                  <input id="phone" name="phone" type="tel" autocomplete="tel">
+                  <input id="phone" name="phone" type="tel" autocomplete="tel" value="${escapeHtml(state.contact.phone || "")}">
                 </div>
               </div>
               <label class="checkbox-row">
-                <input id="smsOptIn" type="checkbox">
+                <input id="smsOptIn" type="checkbox" ${state.contact.smsOptIn ? "checked" : ""}>
                 <span>Send me winner/result reminders by SMS. Message and data rates may apply. This is optional.</span>
               </label>
               <p class="error" id="formError"></p>
             `,
-            actions: `${button("Continue", "terms")}${button("Back", "back", "ghost")}`
+            actions: `${button("Continue", "terms")}${button("Back", "back", "ghost")}`,
+            onRendered() {
+              ["firstName", "lastName", "email", "phone", "smsOptIn"].forEach((id) => {
+                document.getElementById(id)?.addEventListener("input", captureContactDraft);
+                document.getElementById(id)?.addEventListener("change", captureContactDraft);
+              });
+            }
           });
           attachActions();
         },
@@ -1163,13 +1218,28 @@
             prompt: "By entering, you confirm that your information is accurate and that you meet the campaign eligibility requirements.",
             body: `
               <label class="checkbox-row">
-                <input id="termsCheck" type="checkbox">
+                <input id="termsCheck" type="checkbox" ${state.terms_accepted ? "checked" : ""}>
                 <span>I accept the <a href="https://vessi.com/pages/terms-conditions" target="_blank" rel="noopener">giveaway terms and conditions</a>.</span>
+              </label>
+              <label class="checkbox-row">
+                <input id="marketingCheck" type="checkbox" ${state.marketing_consent ? "checked" : ""}>
+                <span>I would like to receive Vessi news and marketing by email. This is optional.</span>
               </label>
               <p class="mini-note">Swap this link for the final 2026 back-to-school giveaway terms before launch.</p>
               <p class="error" id="formError"></p>
             `,
-            actions: `${button("See My Result", "results")}${button("Back", "back", "ghost")}`
+            actions: `${button("See My Result", "results")}${button("Back", "back", "ghost")}`,
+            onRendered() {
+              document.getElementById("termsCheck")?.addEventListener("change", (event) => {
+                state.terms_accepted = event.target.checked;
+                syncUpdate();
+              });
+              document.getElementById("marketingCheck")?.addEventListener("change", (event) => {
+                state.marketing_consent = event.target.checked;
+                state.consent_date = event.target.checked ? new Date().toISOString() : "";
+                syncUpdate();
+              });
+            }
           });
           attachActions();
         },
@@ -1202,8 +1272,10 @@
       function submitRegion() {
         const select = document.getElementById("regionSelect");
         if (!select || !select.value) return setError("Choose a region to continue.");
-        state.answers[state.step] = { value: select.value, label: select.options[select.selectedIndex].text };
+        state.answers[state.step] = { value: select.value, label: select.options[select.selectedIndex].text, tags: [] };
+        trackEvent("quiz_answered", { question_id: state.step, answer: select.value, role: state.role });
         goNext(select.value, select.options[select.selectedIndex].text);
+        syncUpdate();
       }
 
       function renderInsight({ title, text, product }) {
@@ -1229,7 +1301,19 @@
         const school = document.getElementById("schoolName").value.trim();
         if (!school) return setError("Add a school or institution name to continue.");
         state.profile.school = school;
+        syncUpdate();
         pushStep("contact");
+      }
+
+      function captureContactDraft() {
+        state.contact = {
+          first: document.getElementById("firstName")?.value.trim() || "",
+          last: document.getElementById("lastName")?.value.trim() || "",
+          email: document.getElementById("email")?.value.trim() || "",
+          phone: document.getElementById("phone")?.value.trim() || "",
+          smsOptIn: Boolean(document.getElementById("smsOptIn")?.checked)
+        };
+        syncUpdate();
       }
 
       function submitContact() {
@@ -1241,14 +1325,24 @@
         if (!first || !last || !email) return setError("First name, last name, and email are required.");
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setError("Enter a valid email address.");
         state.contact = { first, last, email, phone, smsOptIn };
-        trackEvent("lead_captured", { role: state.role, email_domain: email.split("@")[1] || "" });
+        syncUpdate();
+        analytics.identify({ email, first_name: first, last_name: last });
+        trackEvent("contact_submitted", { role: state.role }, { once: true });
         pushStep("terms");
       }
 
       function submitTerms() {
         if (!document.getElementById("termsCheck").checked) return setError("Accept the terms to complete your entry.");
+        state.terms_accepted = true;
+        state.marketing_consent = document.getElementById("marketingCheck").checked;
+        state.consent_date = state.marketing_consent ? (state.consent_date || new Date().toISOString()) : "";
+        state.entry_completed_at = new Date().toISOString();
+        const finalProfile = klaviyoProfile();
+        analytics.identify(finalProfile);
+        void analytics.subscribe(finalProfile, state.marketing_consent);
+        void quizSync.flush({ keepalive: true });
         progressBar.style.width = "100%";
-        trackEvent("quiz_completed", summary());
+        analytics.track("quiz_completed", summary(), { once: true, klaviyoProperties: finalProfile });
         pushStep("results");
       }
 
@@ -1316,7 +1410,18 @@
         const copy = resultCopy(product);
         hidden.recommended_product = product.name;
         hidden.intent_bucket = intentBucket();
-        const ctaUrl = `${product.url}?utm_source=${encodeURIComponent(hidden.utm_source || "quiz")}&utm_campaign=${encodeURIComponent(hidden.utm_campaign || "bts-quiz")}&utm_content=${encodeURIComponent(state.role + "-" + intentBucket())}&affiliate_id=${encodeURIComponent(hidden.affiliate_id || "")}`;
+        const attribution = {
+          entry_id: quizSync.entry.entry_id,
+          utm_source: hidden.utm_source || quizConfig.utmSource || "quiz",
+          utm_medium: quizConfig.utmMedium || "quiz",
+          utm_campaign: hidden.utm_campaign || quizConfig.campaign || "bts-quiz",
+          utm_content: `${state.role}-${intentBucket()}`,
+          affiliate_id: hidden.affiliate_id || "",
+          role: state.role,
+          recommendation: product.name,
+          intent_bucket: intentBucket()
+        };
+        const ctaUrl = addAttributionToUrl(product.url, attribution);
 
         render({
           kicker: "Result ready",
@@ -1340,7 +1445,7 @@
                     <div class="profile-item"><strong>Role</strong><span>${state.role === "teacher" ? "Teacher / education professional" : "Student"}</span></div>
                     <div class="profile-item"><strong>Intent</strong><span>${intentBucket().replace("_", " ")}</span></div>
                     <div class="profile-item"><strong>Region</strong><span>${state.country === "us" ? "United States" : "Canada"} / ${state.region}</span></div>
-                    <div class="profile-item"><strong>School</strong><span>${state.profile.school}</span></div>
+                    <div class="profile-item"><strong>School</strong><span>${escapeHtml(state.profile.school)}</span></div>
                   </div>
                 </div>
               </div>
@@ -1354,21 +1459,16 @@
           `,
           actions: `
             <a class="primary" href="${ctaUrl}" data-track="cta_clicked" data-track-section="results" data-track-text="Shop My Match">Shop My Match</a>
-            <a class="secondary" href="https://vessi.com/" data-track="cta_clicked" data-track-section="results" data-track-text="Share With My School">Share With My School</a>
+            <a class="secondary" href="https://vessi.com/">Share With My School</a>
             ${button("Start Over", "restart", "ghost")}
           `,
           progress: 100,
           onRendered() {
-            screen.querySelector('[data-action="restart"]').addEventListener("click", () => location.reload());
-            screen.querySelectorAll("[data-track]").forEach((el) => {
-              el.addEventListener("click", () => trackEvent(el.dataset.track, {
-                section: el.dataset.trackSection,
-                text: el.dataset.trackText,
-                recommended_product: product.name,
-                intent_bucket: intentBucket()
-              }));
+            screen.querySelector('[data-action="restart"]').addEventListener("click", () => {
+              quizSync.reset();
+              location.reload();
             });
-            trackEvent("results_viewed", summary());
+            trackEvent("result_viewed", summary(), { once: true });
           }
         });
       }
@@ -1391,7 +1491,10 @@
           actions: `<a class="primary" href="https://vessi.com/">Shop Vessi</a>${button("Start Over", "restart", "ghost")}`,
           progress: 100,
           onRendered() {
-            screen.querySelector('[data-action="restart"]').addEventListener("click", () => location.reload());
+            screen.querySelector('[data-action="restart"]').addEventListener("click", () => {
+              quizSync.reset();
+              location.reload();
+            });
             trackEvent("ineligible_viewed", { reason });
           }
         });
@@ -1401,16 +1504,34 @@
         const product = recommend();
         return {
           role: state.role,
-          region: state.region,
-          school: state.profile.school,
           tags: Array.from(state.tags),
           intent_bucket: intentBucket(),
-          recommended_product: product.name,
-          hidden
+          recommended_product: product.name
+        };
+      }
+
+      function klaviyoProfile() {
+        return {
+          email: state.contact.email,
+          first_name: state.contact.first,
+          last_name: state.contact.last,
+          country: state.country,
+          state_province: state.region,
+          type: state.role,
+          school: state.profile.school,
+          answers: Object.fromEntries(Object.entries(state.answers).map(([key, answer]) => [key, answer.value])),
+          recommendation: recommend().name,
+          intent_bucket: intentBucket(),
+          entry_id: quizSync.entry.entry_id,
+          entry_started_at: quizSync.entry.entry_started_at,
+          entry_completed_at: state.entry_completed_at,
+          marketing_consent: state.marketing_consent,
+          consent_date: state.consent_date
         };
       }
 
       routes.welcome();
+      trackEvent("quiz_viewed", {}, { once: true });
     </script>
   </body>
 </html>
