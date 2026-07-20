@@ -291,6 +291,37 @@
         text-transform: uppercase;
       }
 
+      .screen-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .screen-header .kicker {
+        margin: 0;
+      }
+
+      .question-back {
+        flex: 0 0 auto;
+        min-height: 44px;
+        border: 0;
+        padding: 8px 2px 8px 10px;
+        background: transparent;
+        color: var(--moss-dark);
+        font: inherit;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .question-back:hover,
+      .question-back:focus-visible {
+        color: var(--ink);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
       h2 {
         margin: 0;
         font-size: clamp(34px, 5vw, 58px);
@@ -1063,12 +1094,16 @@
         shell.dataset.view = isLanding ? "landing" : "quiz";
         brandPanel.setAttribute("aria-hidden", String(!isLanding));
         brandPanel.inert = !isLanding;
+        const showQuestionBack = !isLanding && options.length > 0;
         const computedProgress = progress == null ? Math.min(96, Math.round((state.path.length / totalCoreSteps) * 100)) : progress;
         progressBar.style.width = `${computedProgress}%`;
         screen.classList.remove("active");
         requestAnimationFrame(() => {
           screen.innerHTML = `
-            ${kicker ? `<p class="kicker">${kicker}</p>` : ""}
+            ${(kicker || showQuestionBack) ? `<div class="screen-header">
+              ${kicker ? `<p class="kicker">${kicker}</p>` : ""}
+              ${showQuestionBack ? `<button class="question-back" type="button" data-action="back" aria-label="Go back to the previous question">← Back</button>` : ""}
+            </div>` : ""}
             <h2 tabindex="-1">${title}</h2>
             ${prompt ? `<p class="prompt">${prompt}</p>` : ""}
             ${media ? `<figure class="question-accent" aria-hidden="true"><img src="${media}" alt="" loading="lazy" decoding="async"></figure>` : ""}
