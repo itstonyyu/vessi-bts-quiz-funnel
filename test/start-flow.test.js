@@ -16,6 +16,12 @@ test("question screens reset to the top and use the mobile viewport", () => {
   assert.match(html, /<h2 tabindex="-1">\$\{title\}<\/h2>/);
 });
 
+test("every multiple-choice question renders an accessible back control", () => {
+  assert.match(html, /const showQuestionBack = !isLanding && options\.length > 0;/);
+  assert.match(html, /showQuestionBack \? `<button class="question-back" type="button" data-action="back" aria-label="Go back to the previous question">← Back<\/button>`/);
+  assert.match(html, /if \(action === "back"\) back\(\);/);
+});
+
 test("selected questions use compact, decorative lifestyle accents", () => {
   assert.match(html, /\.question-accent\s*{[\s\S]*?width: min\(100%, 320px\);[\s\S]*?height: 88px;/);
   assert.match(html, /\.shell\.quiz-started \.question-accent\s*{[\s\S]*?height: 72px;/);
