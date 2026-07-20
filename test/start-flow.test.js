@@ -15,3 +15,13 @@ test("question screens reset to the top and use the mobile viewport", () => {
   assert.match(html, /\.shell\.quiz-started \.quiz-card\s*{[\s\S]*?min-height: calc\(100dvh - 24px\)/);
   assert.match(html, /<h2 tabindex="-1">\$\{title\}<\/h2>/);
 });
+
+test("selected questions use compact, decorative lifestyle accents", () => {
+  assert.match(html, /\.question-accent\s*{[\s\S]*?width: min\(100%, 320px\);[\s\S]*?height: 88px;/);
+  assert.match(html, /\.shell\.quiz-started \.question-accent\s*{[\s\S]*?height: 72px;/);
+  assert.match(html, /@media \(min-width: 1025px\) and \(max-height: 760px\)[\s\S]*?\.shell\.quiz-started \.question-accent\s*{\s*display: none;/);
+  assert.match(html, /<figure class="question-accent" aria-hidden="true"><img src="\$\{media\}" alt="" loading="lazy" decoding="async"><\/figure>/);
+  assert.match(html, /student_rain\(\)[\s\S]*?media: "img\/brand-rain\.jpg"/);
+  assert.match(html, /student_lifestyle\(\)[\s\S]*?media: "img\/weekend-classic-lifestyle\.jpg"/);
+  assert.match(html, /teacher_use\(\)[\s\S]*?media: "img\/brand-work\.jpg"/);
+});
