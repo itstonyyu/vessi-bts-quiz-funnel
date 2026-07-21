@@ -48,17 +48,18 @@ test("buttons use pill geometry, sentence case, and the exact focus outline", ()
   }
 });
 
-test("teacher workday image preserves its full composition on mobile", () => {
-  assert.match(html, /mediaClass:\s*"question-accent--teacher-workday"/);
+test("Typeform student and teacher images preserve their full composition", () => {
+  assert.match(html, /mediaClass:\s*"statement-media"/);
+  assert.match(html, /media:\s*"img\/typeform-student\.jpg"/);
+  assert.match(html, /media:\s*"img\/typeform-teacher\.jpg"/);
   assert.match(html, /class="question-accent \$\{mediaClass\}"/);
-  assert.match(styles, /\.question-accent\s*{[\s\S]*?aspect-ratio:\s*40\s*\/\s*11/);
+  assert.match(styles, /\.question-accent\.statement-media\s*{[\s\S]*?aspect-ratio:\s*1\s*\/\s*1/);
   assert.match(styles, /\.question-accent img\s*{[\s\S]*?object-fit:\s*contain/);
-  assert.doesNotMatch(styles, /\.question-accent--teacher-workday img\s*{/);
 });
 
-test("customer-facing product proof uses approved claims", () => {
-  assert.match(html, /Dyma-tex®/);
-  assert.match(html, /365-Day Waterproof Guarantee/);
-  assert.match(html, /Lightweight and breathable/);
+test("customer-facing product proof matches the supplied Typeform", () => {
+  assert.match(html, /waterproof sneakers built for campus weather/);
+  assert.match(html, /keep your feet dry, breathable, and comfortable/);
+  assert.match(html, /waterproof sneakers made for real school days/);
   assert.doesNotMatch(html, /easy-clean waterproof protection|Built for rainy commutes|Built for rainy campus walks/);
 });

@@ -198,17 +198,18 @@
 
       .brand-media {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        grid-template-rows: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr);
+        flex: 1;
         gap: 14px;
         min-height: 0;
-        margin-top: 42px;
+        margin-top: 32px;
       }
 
       .media-card {
         position: relative;
         min-height: 0;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 2 / 3;
         overflow: hidden;
         border: 1px solid var(--vessi-sky);
         border-radius: var(--card-radius);
@@ -223,6 +224,7 @@
         width: 100%;
         height: 100%;
         object-fit: contain;
+        object-position: center;
         display: block;
       }
 
@@ -366,6 +368,19 @@
         line-height: 1.55;
       }
 
+      .giveaway-details {
+        display: grid;
+        gap: 10px;
+        margin-top: 24px;
+        color: var(--vessi-ink);
+        font-size: 17px;
+        line-height: 1.5;
+      }
+
+      .giveaway-details p {
+        margin: 0;
+      }
+
       /* Question assets are pre-composed at 40:11. Preserve that full frame so
          footwear and context are never lost to runtime cropping. */
       .question-accent {
@@ -384,6 +399,26 @@
         height: 100%;
         display: block;
         object-fit: contain;
+        object-position: center;
+      }
+
+      .question-accent.statement-media {
+        width: min(100%, 360px);
+        aspect-ratio: 1 / 1;
+        align-self: center;
+        background: var(--vessi-white);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
 
       .option-grid {
@@ -1058,9 +1093,9 @@
         }
 
         .shell:not(.quiz-started) .brand-media {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          grid-template-rows: 130px;
-          min-height: 130px;
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: 220px;
+          min-height: 220px;
           gap: 8px;
         }
 
@@ -1077,7 +1112,7 @@
         }
       }
     </style>
-    <script type="module" crossorigin src="./assets/index-BoQgJ4tu.js"></script>
+    <script type="module" crossorigin src="./assets/index-14CfEG2r.js"></script>
   </head>
   <body>
     <noscript><img height="1" width="1" style="display:none"
@@ -1091,21 +1126,8 @@
         </div>
         <div class="brand-media" aria-hidden="true">
           <div class="media-card large">
-            <img src="./assets/brand-work-ChcdAh3k.jpg" alt="">
-            <span class="media-caption">Weather-Free</span>
+            <img src="img/typeform-weekend-collection.jpg" alt="">
           </div>
-          <div class="media-card">
-            <img src="./assets/weekend-neo-lifestyle-0GCLwUP4.jpg" alt="">
-            <span class="media-caption">Waterproof knit</span>
-          </div>
-          <div class="media-card product">
-            <img src="./assets/weekend-classic-IlY00xW2.png" alt="">
-            <span class="media-caption">Everyday sneaker</span>
-          </div>
-        </div>
-        <div class="brand-bottom">
-          <h1>Find your back-to-school Vessi match.</h1>
-          <p>Answer five quick match questions, then complete your giveaway entry.</p>
         </div>
       </aside>
 
