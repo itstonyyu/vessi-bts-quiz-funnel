@@ -198,16 +198,17 @@
 
       .brand-media {
         display: grid;
-        grid-template-columns: 1.08fr 0.92fr;
-        grid-template-rows: 1fr 0.86fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: 1fr;
         gap: 14px;
-        min-height: 42dvh;
+        min-height: 0;
         margin-top: 42px;
       }
 
       .media-card {
         position: relative;
-        min-height: 160px;
+        min-height: 0;
+        aspect-ratio: 1 / 1;
         overflow: hidden;
         border: 1px solid var(--vessi-sky);
         border-radius: var(--card-radius);
@@ -215,13 +216,13 @@
       }
 
       .media-card.large {
-        grid-row: span 2;
+        grid-row: auto;
       }
 
       .media-card img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         display: block;
       }
 
@@ -232,8 +233,10 @@
       }
 
       .media-card.product img {
-        width: 90%;
+        width: auto;
         height: auto;
+        max-width: 90%;
+        max-height: 80%;
         object-fit: contain;
         filter: drop-shadow(0 18px 24px rgba(40, 32, 26, 0.18));
       }
@@ -363,11 +366,12 @@
         line-height: 1.55;
       }
 
-      /* Selected question screens use a full-width editorial image band. It is
-         large enough to read without becoming another landing-page hero. */
+      /* Question assets are pre-composed at 40:11. Preserve that full frame so
+         footwear and context are never lost to runtime cropping. */
       .question-accent {
         width: 100%;
-        height: 160px;
+        height: auto;
+        aspect-ratio: 40 / 11;
         margin: 18px 0 0;
         overflow: hidden;
         border: 1px solid var(--vessi-border);
@@ -379,7 +383,7 @@
         width: 100%;
         height: 100%;
         display: block;
-        object-fit: cover;
+        object-fit: contain;
       }
 
       .option-grid {
@@ -438,17 +442,19 @@
 
       .primary,
       .secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         min-height: 50px;
         border-radius: 9999px;
         padding: 0 20px;
         font-weight: 500;
+        line-height: 1;
+        text-align: center;
         text-decoration: none;
       }
 
       .primary {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         border: 1px solid var(--vessi-blue);
         background: var(--vessi-blue);
         color: var(--vessi-white);
@@ -461,10 +467,38 @@
       }
 
       .ghost {
+        min-height: 44px;
         border: 0;
+        padding: 0 12px;
         background: transparent;
         color: var(--muted-ink);
         font-weight: 500;
+      }
+
+      .back-control {
+        width: fit-content;
+        min-width: 72px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: -8px 0 18px -12px;
+        border: 0;
+        border-radius: 9999px;
+        padding: 0 12px;
+        background: transparent;
+        color: var(--muted-ink);
+        font-weight: 500;
+      }
+
+      .back-control:hover {
+        background: var(--vessi-grey);
+        color: var(--vessi-ink);
+      }
+
+      .option.is-selected {
+        border-color: var(--vessi-blue);
+        box-shadow: inset 0 0 0 1px var(--vessi-blue);
       }
 
       .form-grid {
@@ -583,7 +617,7 @@
         aspect-ratio: 1 / 1;
         margin-top: 14px;
         border-radius: var(--card-radius);
-        object-fit: cover;
+        object-fit: contain;
         display: block;
       }
 
@@ -591,6 +625,36 @@
         margin: 0 0 8px;
         font-size: 20px;
         font-weight: 500;
+      }
+
+      .result-eyebrow {
+        margin: 0 0 10px;
+        color: var(--vessi-blue);
+        font-family: 'ABCDiatypeMono', Arial, sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .result-visuals {
+        display: grid;
+        gap: 12px;
+        align-content: start;
+      }
+
+      .result-complete {
+        margin: 20px 0 0;
+        border-radius: 16px;
+        padding: 12px 14px;
+        background: rgba(0, 105, 240, 0.08);
+        color: var(--vessi-ink);
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .result-inline-cta {
+        width: fit-content;
+        margin-top: 18px;
       }
 
       .benefit-list {
@@ -679,7 +743,7 @@
         width: 100%;
         aspect-ratio: 1 / 1;
         border-radius: var(--card-radius);
-        object-fit: cover;
+        object-fit: contain;
         display: block;
       }
 
@@ -693,16 +757,27 @@
         background: rgba(255, 255, 255, 0.56);
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
       @media (min-width: 1025px) and (max-height: 800px) {
         .shell:not(.quiz-started) .brand-panel {
           padding: 24px;
         }
 
         .shell:not(.quiz-started) .brand-media {
-          grid-template-rows: minmax(0, 1fr) minmax(0, 0.86fr);
-          flex: 0 0 220px;
+          grid-template-rows: 1fr;
+          flex: 0 0 auto;
           min-height: 0;
-          height: 220px;
+          height: auto;
           margin-top: 20px;
         }
 
@@ -742,10 +817,37 @@
         }
       }
 
-      /* On short desktop windows, protect answer visibility over decoration. */
+      /* On short desktop windows, protect answer and result CTA visibility over decoration. */
       @media (min-width: 1025px) and (max-height: 760px) {
-        .shell.quiz-started .question-accent {
+        .shell.quiz-started .question-accent,
+        .shell[data-step="results"] .lifestyle-art {
           display: none;
+        }
+
+        .shell[data-step="results"] .screen {
+          min-height: auto;
+          padding: 24px;
+        }
+
+        .shell[data-step="results"] h2 {
+          font-size: 42px;
+        }
+
+        .shell[data-step="results"] .prompt {
+          margin-top: 10px;
+          font-size: 16px;
+        }
+
+        .shell[data-step="results"] .result-layout {
+          margin-top: 18px;
+        }
+
+        .shell[data-step="results"] .result-card {
+          padding: 18px;
+        }
+
+        .shell[data-step="results"] .actions {
+          padding-top: 10px;
         }
       }
 
@@ -775,12 +877,12 @@
         }
 
         .brand-media {
-          min-height: 250px;
+          min-height: 0;
           margin-top: 28px;
         }
 
         .shell:not(.quiz-started) .brand-media {
-          min-height: 180px;
+          min-height: 0;
           margin-top: 16px;
         }
 
@@ -868,12 +970,8 @@
 
         .shell.quiz-started .question-accent {
           width: 100%;
-          height: 120px;
+          height: auto;
           margin-top: 14px;
-        }
-
-        .question-accent--teacher-workday img {
-          object-position: right center;
         }
 
         .shell.quiz-started .question-accent + .option-grid {
@@ -887,6 +985,10 @@
 
         .shell.quiz-started .actions {
           padding-top: 24px;
+        }
+
+        .shell[data-step="results"] .result-inline-cta {
+          width: 100%;
         }
 
         .shell.quiz-started .form-grid {
@@ -1001,8 +1103,8 @@
           </div>
         </div>
         <div class="brand-bottom">
-          <h1>Dress for your day, not the forecast.</h1>
-          <p>Answer a few quick questions to find your Vessi match and enter the back-to-school giveaway—whatever the forecast.</p>
+          <h1>Find your back-to-school Vessi match.</h1>
+          <p>Answer five quick match questions, then complete your giveaway entry.</p>
         </div>
       </aside>
 
@@ -1119,20 +1221,24 @@
         const isLanding = state.step === "welcome";
         shell.classList.toggle("quiz-started", !isLanding);
         shell.dataset.view = isLanding ? "landing" : "quiz";
+        shell.dataset.step = state.step;
         brandPanel.setAttribute("aria-hidden", String(!isLanding));
         brandPanel.inert = !isLanding;
         const computedProgress = progress == null ? Math.min(96, Math.round((state.path.length / totalCoreSteps) * 100)) : progress;
+        const selectedValue = state.answers[state.step]?.value || "";
+        const showInlineBack = !isLanding && state.step !== "results" && state.path.length > 1 && !actions.includes('data-action="back"');
         progressBar.style.width = `${computedProgress}%`;
         screen.classList.remove("active");
         requestAnimationFrame(() => {
           screen.innerHTML = `
+            ${showInlineBack ? `<button class="back-control" type="button" data-action="back" aria-label="Go back to the previous step">← Back</button>` : ""}
             ${kicker ? `<p class="kicker">${kicker}</p>` : ""}
             <h2 tabindex="-1">${title}</h2>
             ${prompt ? `<p class="prompt">${prompt}</p>` : ""}
             ${media ? `<figure class="question-accent ${mediaClass}" aria-hidden="true"><img src="${media}" alt="" loading="lazy" decoding="async"></figure>` : ""}
             ${body}
             ${options.length ? `<div class="option-grid">${options.map((option, index) => `
-              <button class="option" type="button" data-value="${option.value}" data-tags="${(option.tags || []).join(",")}" data-label="${option.label.replace(/"/g, "&quot;")}">
+              <button class="option ${selectedValue === option.value ? "is-selected" : ""}" type="button" data-value="${option.value}" data-tags="${(option.tags || []).join(",")}" data-label="${option.label.replace(/"/g, "&quot;")}" aria-pressed="${selectedValue === option.value}">
                 <span class="option-key">${String.fromCharCode(65 + index)}</span>
                 <span>${option.label}</span>
               </button>
@@ -1177,13 +1283,13 @@
         }
         if (current === "country") {
           state.country = value;
-          if (value === "other") return showIneligible("This giveaway is only open to eligible US and Canada participants.");
+          if (value === "other") return showIneligible("Entries are currently open to eligible participants in the United States and Canada.");
           if (value === "canada") return pushStep("province");
           return pushStep("state");
         }
         if (current === "province") {
           state.region = label;
-          if (value === "quebec") return showIneligible("Quebec is excluded from this giveaway, but you can still shop back-to-school Vessi picks.");
+          if (value === "quebec") return showIneligible("Quebec isn’t included in this giveaway.");
           return pushStep("age");
         }
         if (current === "state") {
@@ -1243,13 +1349,13 @@
           render({
             kicker: "Back-to-school giveaway",
             title: "Dress for your day, not the forecast.",
-            prompt: "Answer a few quick questions to find your 100% waterproof Vessi match and enter the back-to-school giveaway.",
+            prompt: "Find your 100% waterproof Vessi match, then complete your back-to-school giveaway entry.",
             body: `
               <div class="footer-trust">
                 <span class="trust-pill">100% waterproof</span>
                 <span class="trust-pill">Lightweight and breathable</span>
                 <span class="trust-pill">365-Day Waterproof Guarantee</span>
-                <span class="trust-pill">Dyma-tex® knit</span>
+                <span class="trust-pill">No purchase necessary</span>
               </div>
               <div class="image-strip" aria-label="Vessi product and lifestyle images">
                 <img src="img/weekend-classic-lifestyle.jpg" alt="White Vessi sneakers with water droplets">
@@ -1257,7 +1363,7 @@
                 <img src="img/weekend-neo-lifestyle.jpg" alt="Vessi sneaker stepping through water">
               </div>
             `,
-            actions: `${button("Find my match", "start")}<a class="secondary" href="https://vessi.com/" data-track="cta_clicked" data-track-section="welcome">Shop Vessi</a>`,
+            actions: `${button("Start my match", "start")}<a class="secondary" href="https://vessi.com/" data-track="cta_clicked" data-track-section="welcome">Shop Vessi</a>`,
             progress: 3
           });
           attachActions();
@@ -1265,11 +1371,10 @@
         role() {
           render({
             kicker: "Step 1",
-            title: "Which best describes you?",
-            prompt: "We will tailor your recommendation around how you actually move through the school day.",
+            title: "Are you a student or educator?",
             options: [
               { value: "student", label: "Student" },
-              { value: "teacher", label: "Teacher / education professional" }
+              { value: "teacher", label: "Teacher or education professional" }
             ]
           });
         },
@@ -1277,7 +1382,7 @@
           render({
             kicker: "Eligibility",
             title: "Where are you entering from?",
-            prompt: "This quick check keeps the giveaway clean before we ask for contact details.",
+            prompt: "We’ll check eligibility before asking for your contact details.",
             options: [
               { value: "us", label: "United States" },
               { value: "canada", label: "Canada" },
@@ -1286,21 +1391,20 @@
           });
         },
         state() {
-          const states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Florida", "Georgia", "Illinois", "Massachusetts", "Michigan", "New York", "Oregon", "Pennsylvania", "Texas", "Virginia", "Washington", "Wisconsin"];
+          const states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
           regionSelect("What state are you entering from?", states, "age");
         },
         province() {
-          const provinces = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"];
+          const provinces = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"];
           regionSelect("What province are you entering from?", provinces, "age");
         },
         age() {
           render({
             kicker: "Eligibility",
             title: "Are you 18 or older?",
-            prompt: "Entrants must be 18+ to qualify for the giveaway.",
             options: [
-              { value: "18plus", label: "Yes, I am 18+" },
-              { value: "under18", label: "No, I am under 18" }
+              { value: "18plus", label: "Yes" },
+              { value: "under18", label: "No" }
             ]
           });
         },
@@ -1319,7 +1423,7 @@
         student_rain() {
           render({
             kicker: "Student match",
-            title: "When it rains, what do you usually wear to class?",
+            title: "What do you reach for on rainy class days?",
             media: "img/question-student-rain.jpg",
             options: [
               { value: "regular", label: "Regular sneakers", tags: ["wet_style_conflict", "waterproof_need"] },
@@ -1333,7 +1437,8 @@
         student_pain() {
           render({
             kicker: "Student match",
-            title: "What matters most on rainy campus days?",
+            title: "What would make rainy campus days better?",
+            prompt: "Choose the one that matters most.",
             options: [
               { value: "socks", label: "Dry socks", tags: ["waterproof_need"] },
               { value: "walks", label: "Comfortable campus walks", tags: ["comfort_need"] },
@@ -1346,7 +1451,7 @@
         student_lifestyle() {
           render({
             kicker: "Student match",
-            title: "Your back-to-school shoes need to work for...",
+            title: "Where do your back-to-school shoes need to take you?",
             media: "img/question-student-commute.jpg",
             options: [
               { value: "class", label: "Class and campus walks" },
@@ -1359,12 +1464,12 @@
         },
         student_intent() {
           render({
-            kicker: "Purchase timing",
-            title: "Are you planning to buy back-to-school shoes soon?",
+            kicker: "One last match question",
+            title: "When are you hoping to find your next pair?",
             options: [
-              { value: "active", label: "Yes, I am actively looking", tags: ["high_intent"] },
-              { value: "maybe", label: "Maybe, if I find the right pair", tags: ["medium_intent", "deal_sensitive"] },
-              { value: "giveaway", label: "Not yet, mostly entering the giveaway", tags: ["low_intent"] }
+              { value: "active", label: "For the start of school", tags: ["high_intent"] },
+              { value: "maybe", label: "When I find the right pair", tags: ["medium_intent", "deal_sensitive"] },
+              { value: "giveaway", label: "I’m browsing for now", tags: ["low_intent"] }
             ]
           });
         },
@@ -1393,7 +1498,7 @@
         teacher_rain() {
           render({
             kicker: "Teacher match",
-            title: "When it rains, what do you usually wear to school?",
+            title: "What do you reach for on rainy school days?",
             media: "img/question-teacher-rain.jpg",
             options: [
               { value: "regular", label: "Regular sneakers", tags: ["waterproof_need"] },
@@ -1407,12 +1512,13 @@
         teacher_pain() {
           render({
             kicker: "Teacher match",
-            title: "What would make rainy school days easier?",
+            title: "What would make rainy school days better?",
+            prompt: "Choose the one that matters most.",
             options: [
               { value: "socks", label: "Dry socks", tags: ["waterproof_need"] },
-              { value: "tired", label: "Lightweight comfort", tags: ["comfort_need"] },
+              { value: "tired", label: "Comfort for long days", tags: ["comfort_need"] },
               { value: "dirty", label: "Simple shoe care", tags: ["easy_clean_need"] },
-              { value: "clunky", label: "A lighter option", tags: ["lightweight_need"] },
+              { value: "clunky", label: "No clunky rain boots", tags: ["lightweight_need"] },
               { value: "style", label: "Everyday sneaker style", tags: ["style_need"] }
             ]
           });
@@ -1434,12 +1540,12 @@
         },
         teacher_intent() {
           render({
-            kicker: "Purchase timing",
-            title: "Are you considering new school shoes in the next 30 days?",
+            kicker: "One last match question",
+            title: "When would a new pair be most useful?",
             options: [
-              { value: "yes", label: "Yes, before or near the start of school", tags: ["high_intent"] },
-              { value: "maybe", label: "Maybe, if the fit is right", tags: ["medium_intent", "deal_sensitive"] },
-              { value: "later", label: "Not right now", tags: ["low_intent"] }
+              { value: "yes", label: "For the start of school", tags: ["high_intent"] },
+              { value: "maybe", label: "When I find the right fit", tags: ["medium_intent", "deal_sensitive"] },
+              { value: "later", label: "I’m browsing for now", tags: ["low_intent"] }
             ]
           });
         },
@@ -1454,21 +1560,21 @@
           });
         },
         school() {
-          const label = state.role === "student" ? "School / institution name" : "School / education center";
+          const label = "School or institution";
           render({
             kicker: "Entry details",
-            title: state.role === "student" ? "What school are you repping?" : "What school should your entry count toward?",
-            prompt: "This helps count entries toward school and community prize tracking.",
+            title: "What’s your school or institution?",
+            prompt: "Add the school or institution connected with your entry.",
             body: `
               <div class="form-grid">
                 <div class="field full">
                   <label for="schoolName">${label}</label>
-                  <input id="schoolName" name="schoolName" autocomplete="organization" value="${escapeHtml(state.profile.school || "")}" required>
+                  <input id="schoolName" name="schoolName" autocomplete="organization" minlength="2" aria-describedby="formError" value="${escapeHtml(state.profile.school || "")}" required>
                 </div>
               </div>
-              <p class="error" id="formError"></p>
+              <p class="error" id="formError" role="alert" aria-live="polite"></p>
             `,
-            actions: `${button("Continue", "contact")}${button("Back", "back", "ghost")}`,
+            actions: `${button("Add my school", "contact")}${button("Back", "back", "ghost")}`,
             onRendered() {
               document.getElementById("schoolName")?.addEventListener("input", (event) => {
                 state.profile.school = event.target.value;
@@ -1479,38 +1585,31 @@
           attachActions();
         },
         contact() {
+          const privacyUrl = state.country === "canada" ? "https://ca.vessi.com/policies/privacy-policy" : "https://vessi.com/policies/privacy-policy";
           render({
             kicker: "Entry details",
-            title: "Where should we send your entry confirmation?",
-            prompt: "We will also send your personalized Vessi match so you can find it again.",
+            title: "Add your contact details.",
+            prompt: `We’ll use these details for your giveaway entry. Read Vessi’s <a href="${privacyUrl}" target="_blank" rel="noopener">Privacy Policy</a>.`,
             body: `
               <div class="form-grid">
                 <div class="field">
                   <label for="firstName">First name</label>
-                  <input id="firstName" name="firstName" autocomplete="given-name" value="${escapeHtml(state.contact.first || "")}" required>
+                  <input id="firstName" name="firstName" autocomplete="given-name" minlength="2" aria-describedby="formError" value="${escapeHtml(state.contact.first || "")}" required>
                 </div>
                 <div class="field">
                   <label for="lastName">Last name</label>
-                  <input id="lastName" name="lastName" autocomplete="family-name" value="${escapeHtml(state.contact.last || "")}" required>
+                  <input id="lastName" name="lastName" autocomplete="family-name" minlength="2" aria-describedby="formError" value="${escapeHtml(state.contact.last || "")}" required>
                 </div>
                 <div class="field full">
                   <label for="email">Email</label>
-                  <input id="email" name="email" type="email" autocomplete="email" value="${escapeHtml(state.contact.email || "")}" required>
-                </div>
-                <div class="field full">
-                  <label for="phone">Phone, optional</label>
-                  <input id="phone" name="phone" type="tel" autocomplete="tel" value="${escapeHtml(state.contact.phone || "")}">
+                  <input id="email" name="email" type="email" autocomplete="email" aria-describedby="formError" value="${escapeHtml(state.contact.email || "")}" required>
                 </div>
               </div>
-              <label class="checkbox-row">
-                <input id="smsOptIn" type="checkbox" ${state.contact.smsOptIn ? "checked" : ""}>
-                <span>Send me winner/result reminders by SMS. Message and data rates may apply. This is optional.</span>
-              </label>
-              <p class="error" id="formError"></p>
+              <p class="error" id="formError" role="alert" aria-live="polite"></p>
             `,
-            actions: `${button("Continue", "terms")}${button("Back", "back", "ghost")}`,
+            actions: `${button("Review my entry", "terms")}${button("Back", "back", "ghost")}`,
             onRendered() {
-              ["firstName", "lastName", "email", "phone", "smsOptIn"].forEach((id) => {
+              ["firstName", "lastName", "email"].forEach((id) => {
                 document.getElementById(id)?.addEventListener("input", captureContactDraft);
                 document.getElementById(id)?.addEventListener("change", captureContactDraft);
               });
@@ -1520,22 +1619,22 @@
         },
         terms() {
           render({
-            kicker: "Last step",
-            title: "Accept the giveaway terms?",
-            prompt: "By entering, you confirm that your information is accurate and that you meet the campaign eligibility requirements.",
+            kicker: "Final step",
+            title: "Review and enter.",
+            prompt: "Confirm your eligibility and review the terms before entering.",
             body: `
               <label class="checkbox-row">
-                <input id="termsCheck" type="checkbox" ${state.terms_accepted ? "checked" : ""}>
-                <span>I accept the <a href="${state.country === "canada" ? "https://ca.vessi.com/policies/terms-of-service" : "https://vessi.com/policies/terms-of-service"}" target="_blank" rel="noopener">giveaway terms and conditions</a>.</span>
+                <input id="termsCheck" type="checkbox" aria-describedby="formError" ${state.terms_accepted ? "checked" : ""}>
+                <span>I accept Vessi’s <a href="${state.country === "canada" ? "https://ca.vessi.com/policies/terms-of-service" : "https://vessi.com/policies/terms-of-service"}" target="_blank" rel="noopener">Terms of Service</a>.</span>
               </label>
               <label class="checkbox-row">
                 <input id="marketingCheck" type="checkbox" ${state.marketing_consent ? "checked" : ""}>
                 <span>I would like to receive Vessi news and marketing by email. This is optional.</span>
               </label>
-              <p class="mini-note">No purchase necessary. Eligibility restrictions and giveaway terms apply.</p>
-              <p class="error" id="formError"></p>
+              <p class="mini-note">No purchase necessary. Eligibility restrictions apply.</p>
+              <p class="error" id="formError" role="alert" aria-live="polite"></p>
             `,
-            actions: `${button("See my result", "results")}${button("Back", "back", "ghost")}`,
+            actions: `${button("Enter giveaway & see my result", "results")}${button("Back", "back", "ghost")}`,
             onRendered() {
               document.getElementById("termsCheck")?.addEventListener("change", (event) => {
                 state.terms_accepted = event.target.checked;
@@ -1556,29 +1655,30 @@
       };
 
       function regionSelect(title, options) {
+        const regionLabel = title.includes("state") ? "State" : "Province";
         render({
           kicker: "Eligibility",
           title,
-          prompt: "Select your region so we can confirm giveaway eligibility.",
+          prompt: `Choose your ${regionLabel.toLowerCase()} so we can confirm eligibility.`,
           body: `
             <div class="form-grid">
               <div class="field full">
-                <label for="regionSelect">Region</label>
-                <select id="regionSelect" required>
-                  <option value="">Choose one</option>
+                <label for="regionSelect">${regionLabel}</label>
+                <select id="regionSelect" aria-describedby="formError" required>
+                  <option value="">Choose your ${regionLabel.toLowerCase()}</option>
                   ${options.map((option) => `<option value="${option.toLowerCase().replace(/[^a-z0-9]+/g, "-")}">${option}</option>`).join("")}
                 </select>
               </div>
             </div>
-            <p class="error" id="formError"></p>
+            <p class="error" id="formError" role="alert" aria-live="polite"></p>
           `,
-          actions: `${button("Continue", "regionContinue")}${button("Back", "back", "ghost")}`
+          actions: `${button("Confirm my location", "regionContinue")}${button("Back", "back", "ghost")}`
         });
       }
 
       function submitRegion() {
         const select = document.getElementById("regionSelect");
-        if (!select || !select.value) return setError("Choose a region to continue.");
+        if (!select || !select.value) return setError(`Choose your ${state.step === "state" ? "state" : "province"} to continue.`);
         state.answers[state.step] = { value: select.value, label: select.options[select.selectedIndex].text, tags: [] };
         trackEvent("quiz_answered", { question_id: state.step, answer: select.value, role: state.role });
         goNext(select.value, select.options[select.selectedIndex].text);
@@ -1587,9 +1687,9 @@
 
       function renderInsight({ title, text, product }) {
         render({
-          kicker: "Your match preview",
+          kicker: "Your match",
           title,
-          prompt: text,
+          prompt: `${text} Complete three short entry steps to enter the giveaway.`,
           body: `
             <div class="insight-card">
               <div>
@@ -1599,14 +1699,19 @@
               <img src="${product.image}" alt="${product.name} waterproof sneaker">
             </div>
           `,
-          actions: `${button("Continue to entry", "school")}${button("Back", "back", "ghost")}`
+          actions: `${button("Start my entry", "school")}${button("Back", "back", "ghost")}`
         });
         attachActions();
       }
 
       function submitSchool() {
-        const school = document.getElementById("schoolName").value.trim();
-        if (!school) return setError("Add a school or institution name to continue.");
+        const input = document.getElementById("schoolName");
+        const school = input.value.trim();
+        input.removeAttribute("aria-invalid");
+        if (school.length < 2) {
+          input.setAttribute("aria-invalid", "true");
+          return setError("Enter your school or institution.");
+        }
         state.profile.school = school;
         syncUpdate();
         pushStep("contact");
@@ -1617,21 +1722,33 @@
           first: document.getElementById("firstName")?.value.trim() || "",
           last: document.getElementById("lastName")?.value.trim() || "",
           email: document.getElementById("email")?.value.trim() || "",
-          phone: document.getElementById("phone")?.value.trim() || "",
-          smsOptIn: Boolean(document.getElementById("smsOptIn")?.checked)
+          phone: "",
+          smsOptIn: false
         };
         syncUpdate();
       }
 
       function submitContact() {
-        const first = document.getElementById("firstName").value.trim();
-        const last = document.getElementById("lastName").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const smsOptIn = document.getElementById("smsOptIn").checked;
-        if (!first || !last || !email) return setError("First name, last name, and email are required.");
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setError("Enter a valid email address.");
-        state.contact = { first, last, email, phone, smsOptIn };
+        const firstInput = document.getElementById("firstName");
+        const lastInput = document.getElementById("lastName");
+        const emailInput = document.getElementById("email");
+        const first = firstInput.value.trim();
+        const last = lastInput.value.trim();
+        const email = emailInput.value.trim();
+        [firstInput, lastInput, emailInput].forEach((input) => input.removeAttribute("aria-invalid"));
+        if (first.length < 2) {
+          firstInput.setAttribute("aria-invalid", "true");
+          return setError("Enter your first name.");
+        }
+        if (last.length < 2) {
+          lastInput.setAttribute("aria-invalid", "true");
+          return setError("Enter your last name.");
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          emailInput.setAttribute("aria-invalid", "true");
+          return setError("Enter a valid email address.");
+        }
+        state.contact = { first, last, email, phone: "", smsOptIn: false };
         syncUpdate();
         analytics.identify({ email, first_name: first, last_name: last });
         trackEvent("contact_submitted", { role: state.role }, { once: true });
@@ -1699,15 +1816,9 @@
 
       function resultCopy(product) {
         const rolePhrase = state.role === "teacher" ? "school-day" : "campus";
-        const urgency = intentBucket() === "high_intent"
-          ? `Your match is ready whenever you are. Your giveaway entry stays active.`
-          : intentBucket() === "medium_intent"
-            ? `Save your match and compare it when you are ready. You prioritized ${painLine()}.`
-            : `You are entered. Whatever the forecast, your match is ready when you are.`;
         return {
-          headline: `You are entered. Your ${rolePhrase} match is ${product.name}.`,
-          body: `Based on your answers, you prioritized ${painLine()}. ${product.name} uses 100% waterproof Dyma-tex® knit, with waterproofing built into the knit instead of a coating.`,
-          urgency
+          headline: `Meet your ${rolePhrase} match.`,
+          body: `${product.name} fits your day with ${painLine()} and 100% waterproof Dyma-tex® knit.`
         };
       }
 
@@ -1730,43 +1841,30 @@
         const ctaUrl = addAttributionToUrl(product.url, attribution);
 
         render({
-          kicker: "Result ready",
+          kicker: "Entry submitted",
           title: copy.headline,
           prompt: copy.body,
           body: `
             <div class="result-layout">
-              <div>
-                <div class="result-card">
-                  <p class="result-name">${product.name}</p>
-                  <p class="mini-note">${product.short}</p>
-                  <ul class="benefit-list">
-                    <li>${painLine()}</li>
-                    <li>${microProof()}</li>
-                    <li>${copy.urgency}</li>
-                  </ul>
-                </div>
-                <div class="profile-card">
-                  <strong>Your quiz profile</strong>
-                  <div class="profile-grid">
-                    <div class="profile-item"><strong>Role</strong><span>${state.role === "teacher" ? "Teacher / education professional" : "Student"}</span></div>
-                    <div class="profile-item"><strong>Intent</strong><span>${intentBucket().replace("_", " ")}</span></div>
-                    <div class="profile-item"><strong>Region</strong><span>${state.country === "us" ? "United States" : "Canada"} / ${state.region}</span></div>
-                    <div class="profile-item"><strong>School</strong><span>${escapeHtml(state.profile.school)}</span></div>
-                  </div>
-                </div>
-              </div>
               <div class="result-card">
-                <img class="product-art" src="${product.image}" alt="${product.name} waterproof sneaker">
-                <img class="lifestyle-art" src="${product.lifestyle}" alt="${product.name} lifestyle image">
+                <p class="result-eyebrow">Why it fits your day</p>
                 <p class="result-name">${product.name}</p>
                 <p class="mini-note">${product.short}</p>
+                <ul class="benefit-list">
+                  <li>${painLine()}</li>
+                  <li>100% waterproof Dyma-tex® knit</li>
+                  <li>Backed by our 365-Day Waterproof Guarantee</li>
+                </ul>
+                <p class="result-complete">Your entry has been submitted. Explore your match whenever you’re ready.</p>
+                <a class="primary result-inline-cta" href="${ctaUrl}" data-track="cta_clicked" data-track-section="results" data-track-text="Shop my match">Shop my match</a>
+              </div>
+              <div class="result-card result-visuals">
+                <img class="product-art" src="${product.image}" alt="${product.name} waterproof sneaker">
+                <img class="lifestyle-art" src="${product.lifestyle}" alt="${product.name} lifestyle image">
               </div>
             </div>
           `,
-          actions: `
-            <a class="primary" href="${ctaUrl}" data-track="cta_clicked" data-track-section="results" data-track-text="Shop my match">Shop my match</a>
-            ${button("Start over", "restart", "ghost")}
-          `,
+          actions: `${button("Start over", "restart", "ghost")}`,
           progress: 100,
           onRendered() {
             screen.querySelector('[data-action="restart"]').addEventListener("click", () => {
@@ -1780,20 +1878,25 @@
 
       function showIneligible(reason) {
         hidden.eligibility_status = "ineligible";
+        const title = reason.includes("18")
+          ? "You must be 18 or older to enter."
+          : reason.includes("Quebec")
+            ? "This giveaway isn’t available in Quebec."
+            : "This giveaway isn’t available in your location.";
         render({
           kicker: "Eligibility",
-          title: "You are outside the giveaway rules.",
+          title,
           prompt: reason,
           body: `
             <div class="insight-card">
               <div>
-                <strong>You can still shop waterproof back-to-school picks.</strong>
-                <p>We screened eligibility first so you do not spend time completing an entry that cannot qualify.</p>
+                <strong>You can still explore waterproof back-to-school picks.</strong>
+                <p>We checked eligibility before asking for your contact details.</p>
               </div>
               <img src="img/weekend-classic.png" alt="Weekend Classic waterproof sneaker">
             </div>
           `,
-          actions: `<a class="primary" href="https://vessi.com/">Shop Vessi</a>${button("Start over", "restart", "ghost")}`,
+          actions: `<a class="primary" href="https://vessi.com/" data-track="cta_clicked" data-track-section="ineligible">Shop back-to-school picks</a>${button("Start over", "restart", "ghost")}`,
           progress: 100,
           onRendered() {
             screen.querySelector('[data-action="restart"]').addEventListener("click", () => {

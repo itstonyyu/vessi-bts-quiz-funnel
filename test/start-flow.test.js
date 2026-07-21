@@ -16,10 +16,11 @@ test("question screens reset to the top and use the mobile viewport", () => {
   assert.match(html, /<h2 tabindex="-1">\$\{title\}<\/h2>/);
 });
 
-test("selected questions use full-width, decorative lifestyle images", () => {
-  assert.match(html, /\.question-accent\s*{[\s\S]*?width: 100%;[\s\S]*?height: 160px;/);
-  assert.match(html, /\.shell\.quiz-started \.question-accent\s*{[\s\S]*?height: 120px;/);
-  assert.match(html, /@media \(min-width: 1025px\) and \(max-height: 760px\)[\s\S]*?\.shell\.quiz-started \.question-accent\s*{\s*display: none;/);
+test("selected questions use full-width, uncropped lifestyle images", () => {
+  assert.match(html, /\.question-accent\s*{[\s\S]*?width: 100%;[\s\S]*?height: auto;[\s\S]*?aspect-ratio: 40 \/ 11;/);
+  assert.match(html, /\.question-accent img\s*{[\s\S]*?object-fit: contain;/);
+  assert.match(html, /\.shell\.quiz-started \.question-accent\s*{[\s\S]*?height: auto;/);
+  assert.match(html, /@media \(min-width: 1025px\) and \(max-height: 760px\)[\s\S]*?\.shell\.quiz-started \.question-accent,[\s\S]*?display: none;/);
   assert.match(html, /<figure class="question-accent \$\{mediaClass\}" aria-hidden="true"><img src="\$\{media\}" alt="" loading="lazy" decoding="async"><\/figure>/);
   assert.match(html, /student_rain\(\)[\s\S]*?media: "img\/question-student-rain\.jpg"/);
   assert.match(html, /student_lifestyle\(\)[\s\S]*?media: "img\/question-student-commute\.jpg"/);

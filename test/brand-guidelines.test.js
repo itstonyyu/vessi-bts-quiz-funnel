@@ -48,10 +48,12 @@ test("buttons use pill geometry, sentence case, and the exact focus outline", ()
   }
 });
 
-test("teacher workday image has an image-specific right-centered mobile crop", () => {
+test("teacher workday image preserves its full composition on mobile", () => {
   assert.match(html, /mediaClass:\s*"question-accent--teacher-workday"/);
   assert.match(html, /class="question-accent \$\{mediaClass\}"/);
-  assert.match(styles, /@media \(max-width: 720px\)[\s\S]*?\.question-accent--teacher-workday img\s*{\s*object-position:\s*right center;/);
+  assert.match(styles, /\.question-accent\s*{[\s\S]*?aspect-ratio:\s*40\s*\/\s*11/);
+  assert.match(styles, /\.question-accent img\s*{[\s\S]*?object-fit:\s*contain/);
+  assert.doesNotMatch(styles, /\.question-accent--teacher-workday img\s*{/);
 });
 
 test("customer-facing product proof uses approved claims", () => {

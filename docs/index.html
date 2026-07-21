@@ -198,16 +198,17 @@
 
       .brand-media {
         display: grid;
-        grid-template-columns: 1.08fr 0.92fr;
-        grid-template-rows: 1fr 0.86fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: 1fr;
         gap: 14px;
-        min-height: 42dvh;
+        min-height: 0;
         margin-top: 42px;
       }
 
       .media-card {
         position: relative;
-        min-height: 160px;
+        min-height: 0;
+        aspect-ratio: 1 / 1;
         overflow: hidden;
         border: 1px solid var(--vessi-sky);
         border-radius: var(--card-radius);
@@ -215,13 +216,13 @@
       }
 
       .media-card.large {
-        grid-row: span 2;
+        grid-row: auto;
       }
 
       .media-card img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         display: block;
       }
 
@@ -232,8 +233,10 @@
       }
 
       .media-card.product img {
-        width: 90%;
+        width: auto;
         height: auto;
+        max-width: 90%;
+        max-height: 80%;
         object-fit: contain;
         filter: drop-shadow(0 18px 24px rgba(40, 32, 26, 0.18));
       }
@@ -363,11 +366,12 @@
         line-height: 1.55;
       }
 
-      /* Selected question screens use a full-width editorial image band. It is
-         large enough to read without becoming another landing-page hero. */
+      /* Question assets are pre-composed at 40:11. Preserve that full frame so
+         footwear and context are never lost to runtime cropping. */
       .question-accent {
         width: 100%;
-        height: 160px;
+        height: auto;
+        aspect-ratio: 40 / 11;
         margin: 18px 0 0;
         overflow: hidden;
         border: 1px solid var(--vessi-border);
@@ -379,7 +383,7 @@
         width: 100%;
         height: 100%;
         display: block;
-        object-fit: cover;
+        object-fit: contain;
       }
 
       .option-grid {
@@ -438,17 +442,19 @@
 
       .primary,
       .secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         min-height: 50px;
         border-radius: 9999px;
         padding: 0 20px;
         font-weight: 500;
+        line-height: 1;
+        text-align: center;
         text-decoration: none;
       }
 
       .primary {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         border: 1px solid var(--vessi-blue);
         background: var(--vessi-blue);
         color: var(--vessi-white);
@@ -461,10 +467,38 @@
       }
 
       .ghost {
+        min-height: 44px;
         border: 0;
+        padding: 0 12px;
         background: transparent;
         color: var(--muted-ink);
         font-weight: 500;
+      }
+
+      .back-control {
+        width: fit-content;
+        min-width: 72px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: -8px 0 18px -12px;
+        border: 0;
+        border-radius: 9999px;
+        padding: 0 12px;
+        background: transparent;
+        color: var(--muted-ink);
+        font-weight: 500;
+      }
+
+      .back-control:hover {
+        background: var(--vessi-grey);
+        color: var(--vessi-ink);
+      }
+
+      .option.is-selected {
+        border-color: var(--vessi-blue);
+        box-shadow: inset 0 0 0 1px var(--vessi-blue);
       }
 
       .form-grid {
@@ -583,7 +617,7 @@
         aspect-ratio: 1 / 1;
         margin-top: 14px;
         border-radius: var(--card-radius);
-        object-fit: cover;
+        object-fit: contain;
         display: block;
       }
 
@@ -591,6 +625,36 @@
         margin: 0 0 8px;
         font-size: 20px;
         font-weight: 500;
+      }
+
+      .result-eyebrow {
+        margin: 0 0 10px;
+        color: var(--vessi-blue);
+        font-family: 'ABCDiatypeMono', Arial, sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .result-visuals {
+        display: grid;
+        gap: 12px;
+        align-content: start;
+      }
+
+      .result-complete {
+        margin: 20px 0 0;
+        border-radius: 16px;
+        padding: 12px 14px;
+        background: rgba(0, 105, 240, 0.08);
+        color: var(--vessi-ink);
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .result-inline-cta {
+        width: fit-content;
+        margin-top: 18px;
       }
 
       .benefit-list {
@@ -679,7 +743,7 @@
         width: 100%;
         aspect-ratio: 1 / 1;
         border-radius: var(--card-radius);
-        object-fit: cover;
+        object-fit: contain;
         display: block;
       }
 
@@ -693,16 +757,27 @@
         background: rgba(255, 255, 255, 0.56);
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
       @media (min-width: 1025px) and (max-height: 800px) {
         .shell:not(.quiz-started) .brand-panel {
           padding: 24px;
         }
 
         .shell:not(.quiz-started) .brand-media {
-          grid-template-rows: minmax(0, 1fr) minmax(0, 0.86fr);
-          flex: 0 0 220px;
+          grid-template-rows: 1fr;
+          flex: 0 0 auto;
           min-height: 0;
-          height: 220px;
+          height: auto;
           margin-top: 20px;
         }
 
@@ -742,10 +817,37 @@
         }
       }
 
-      /* On short desktop windows, protect answer visibility over decoration. */
+      /* On short desktop windows, protect answer and result CTA visibility over decoration. */
       @media (min-width: 1025px) and (max-height: 760px) {
-        .shell.quiz-started .question-accent {
+        .shell.quiz-started .question-accent,
+        .shell[data-step="results"] .lifestyle-art {
           display: none;
+        }
+
+        .shell[data-step="results"] .screen {
+          min-height: auto;
+          padding: 24px;
+        }
+
+        .shell[data-step="results"] h2 {
+          font-size: 42px;
+        }
+
+        .shell[data-step="results"] .prompt {
+          margin-top: 10px;
+          font-size: 16px;
+        }
+
+        .shell[data-step="results"] .result-layout {
+          margin-top: 18px;
+        }
+
+        .shell[data-step="results"] .result-card {
+          padding: 18px;
+        }
+
+        .shell[data-step="results"] .actions {
+          padding-top: 10px;
         }
       }
 
@@ -775,12 +877,12 @@
         }
 
         .brand-media {
-          min-height: 250px;
+          min-height: 0;
           margin-top: 28px;
         }
 
         .shell:not(.quiz-started) .brand-media {
-          min-height: 180px;
+          min-height: 0;
           margin-top: 16px;
         }
 
@@ -868,12 +970,8 @@
 
         .shell.quiz-started .question-accent {
           width: 100%;
-          height: 120px;
+          height: auto;
           margin-top: 14px;
-        }
-
-        .question-accent--teacher-workday img {
-          object-position: right center;
         }
 
         .shell.quiz-started .question-accent + .option-grid {
@@ -887,6 +985,10 @@
 
         .shell.quiz-started .actions {
           padding-top: 24px;
+        }
+
+        .shell[data-step="results"] .result-inline-cta {
+          width: 100%;
         }
 
         .shell.quiz-started .form-grid {
@@ -975,7 +1077,7 @@
         }
       }
     </style>
-    <script type="module" crossorigin src="./assets/index-CcA8v2jw.js"></script>
+    <script type="module" crossorigin src="./assets/index-BoQgJ4tu.js"></script>
   </head>
   <body>
     <noscript><img height="1" width="1" style="display:none"
@@ -1002,8 +1104,8 @@
           </div>
         </div>
         <div class="brand-bottom">
-          <h1>Dress for your day, not the forecast.</h1>
-          <p>Answer a few quick questions to find your Vessi match and enter the back-to-school giveaway—whatever the forecast.</p>
+          <h1>Find your back-to-school Vessi match.</h1>
+          <p>Answer five quick match questions, then complete your giveaway entry.</p>
         </div>
       </aside>
 
