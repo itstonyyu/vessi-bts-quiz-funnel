@@ -57,9 +57,9 @@ test("Typeform student and teacher images preserve their full composition", () =
   assert.match(styles, /\.question-accent img\s*{[\s\S]*?object-fit:\s*contain/);
 });
 
-test("customer-facing product proof matches the supplied Typeform", () => {
-  assert.match(html, /waterproof sneakers built for campus weather/);
-  assert.match(html, /keep your feet dry, breathable, and comfortable/);
-  assert.match(html, /waterproof sneakers made for real school days/);
+test("customer-facing product proof uses the approved simplified claims", () => {
+  assert.match(html, /waterproof sneakers for rainy days/);
+  assert.match(html, /keep your feet dry, breathable, and comfortable all day/);
+  assert.match(html, /waterproof sneakers for school days/);
   assert.doesNotMatch(html, /easy-clean waterproof protection|Built for rainy commutes|Built for rainy campus walks/);
 });

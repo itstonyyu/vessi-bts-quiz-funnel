@@ -1364,45 +1364,45 @@
             </div>`, actions: button("Enter to win", "start"), progress: 0 });
         },
         role() {
-          render({ title: "Are you a Student or an Education Professional?", prompt: "*Must currently work in education sector in the following capacities: Daycare staff, elementary teachers, junior high teachers, high school teachers, post-secondary teachers, tutors, TA's, and home school teachers.", options: [
+          render({ title: "Are you a student or educator?", prompt: "Education professionals include daycare staff, teachers, tutors, TAs, and homeschool educators.", options: [
             { value: "teacher", label: "Education Professional" }, { value: "student", label: "Student" }
           ] });
         },
-        student_school() { textFieldRoute({ title: "What school are you enrolled in or currently attending?", key: "school", next: "student_walk", autocomplete: "organization" }); },
-        student_walk() { render({ title: "How much do you usually walk around campus in a day?", options: [
+        student_school() { textFieldRoute({ title: "What school do you attend?", key: "school", next: "student_walk", autocomplete: "organization" }); },
+        student_walk() { render({ title: "How much do you walk each day?", options: [
           { value: "under15", label: "Under 15 minutes" }, { value: "15to30", label: "15-30 minutes" }, { value: "30to60", label: "30-60 minutes" }, { value: "over60", label: "Over an hour" }
         ] }); },
-        student_rain() { render({ title: "What do you currently wear to class when it rains?", options: [
+        student_rain() { render({ title: "What do you wear when it's raining?", options: [
           { value: "regular", label: "Regular sneakers" }, { value: "white", label: "White sneakers" }, { value: "boots", label: "Boots" }, { value: "flats", label: "Flats/Loafers" }, { value: "outfit", label: "Whatever matches my outfit" }
         ] }); },
-        student_pain() { render({ title: "What tends to go wrong on rainy campus days?", options: [
+        student_pain() { render({ title: "What goes wrong on rainy days?", options: [
           { value: "socks", label: "Wet socks" }, { value: "walks", label: "Long walks in uncomfortable shoes" }, { value: "dirty", label: "Shoes getting dirty" }, { value: "style", label: "Having to choose between style and staying dry" }, { value: "carry", label: "Carrying or changing into another pair" }
         ] }); },
-        student_statement() { render({ title: "Meet Vessi: waterproof sneakers built for campus weather.", prompt: "They look like everyday sneakers, but they are designed to keep your feet dry, breathable, and comfortable through rain, puddles, long walks, class, errands, and plans after school.", media: "img/typeform-student.jpg", mediaClass: "statement-media", actions: button("Continue", "statementContinue") }); },
-        student_feature() { render({ title: "Which Vessi feature would make campus days easier?", options: [
+        student_statement() { render({ title: "Meet Vessi: waterproof sneakers for rainy days.", prompt: "They keep your feet dry, breathable, and comfortable all day.", media: "img/typeform-student.jpg", mediaClass: "statement-media", actions: button("Continue", "statementContinue") }); },
+        student_feature() { render({ title: "What would make rainy days easier?", options: [
           { value: "waterproof", label: "A waterproof sneaker that still looks good" }, { value: "comfort", label: "Comfort for walking across campus" }, { value: "breathable", label: "A breathable shoe I can wear all day" }, { value: "clean", label: "Easy-clean shoes for bad weather" }, { value: "versatile", label: "One pair that works for class, errands, and going out" }
         ] }); },
-        student_intent() { render({ title: "When do you usually buy shoes for the school year?", options: [
+        student_intent() { render({ title: "When do you buy school shoes?", options: [
           { value: "before", label: "Before the semester starts" }, { value: "orientation", label: "During orientation week" }, { value: "routine", label: "Once I know my campus routine" }, { value: "worn", label: "When my current pair gives out" }, { value: "deal", label: "When I find a good deal" }
         ] }); },
-        teacher_school() { textFieldRoute({ title: "What Education Center are you employed by?", key: "school", next: "teacher_feet", autocomplete: "organization" }); },
-        teacher_feet() { render({ title: "How long are you usually on your feet during a school day?", options: [
+        teacher_school() { textFieldRoute({ title: "Where do you work?", key: "school", next: "teacher_feet", autocomplete: "organization" }); },
+        teacher_feet() { render({ title: "How long are you on your feet each day?", options: [
           { value: "under4", label: "Under 4 hours" }, { value: "4to6", label: "4-6 hours" }, { value: "6to8", label: "6-8 hours" }, { value: "8plus", label: "8+ hours" }
         ] }); },
-        teacher_rain() { render({ title: "What do you currently wear to school when it rains?", options: [
+        teacher_rain() { render({ title: "What do you wear when it's raining?", options: [
           { value: "regular", label: "Regular sneakers" }, { value: "flats", label: "Flats or loafers" }, { value: "boots", label: "Bulky rain boots" }, { value: "old", label: "An old pair I don't mind wrecking" }, { value: "backup", label: "I bring a backup pair just in case" }
         ] }); },
-        teacher_pain() { render({ title: "What tends to go wrong with that option?", options: [
+        teacher_pain() { render({ title: "What goes wrong?", options: [
           { value: "socks", label: "My socks get wet" }, { value: "sore", label: "My feet feel sore" }, { value: "dirty", label: "My shoes get dirty" }, { value: "clunky", label: "I get stuck wearing clunky rain shoes all day" }, { value: "style", label: "I avoid wearing the shoes I actually like" }
         ] }); },
-        teacher_statement() { render({ title: "Meet Vessi: waterproof sneakers made for real school days.", prompt: "They look like everyday sneakers, but they are built to keep your feet dry, comfortable, and breathable through rainy commutes, wet floors, recess duty, spills, and full days on your feet.", media: "img/typeform-teacher.jpg", mediaClass: "statement-media", actions: button("Continue", "statementContinue") }); },
-        teacher_feature() { render({ title: "Which Vessi feature would make your school day better?", options: [
+        teacher_statement() { render({ title: "Meet Vessi: waterproof sneakers for school days.", prompt: "They keep your feet dry, breathable, and comfortable all day.", media: "img/typeform-teacher.jpg", mediaClass: "statement-media", actions: button("Continue", "statementContinue") }); },
+        teacher_feature() { render({ title: "What would make rainy days easier?", options: [
           { value: "waterproof", label: "Waterproof sneakers that still look good" }, { value: "breathable", label: "Breathable comfort that does not feel like rain boots" }, { value: "support", label: "Lightweight support for long days on your feet" }, { value: "clean", label: "Easy-clean shoes for spills, recess, and messy weather" }, { value: "versatile", label: "One pair that works at school and after school" }
         ] }); },
-        teacher_intent() { render({ title: "When do you usually buy back-to-school shoes?", options: [
+        teacher_intent() { render({ title: "When do you buy school shoes?", options: [
           { value: "summer", label: "In summer before school starts" }, { value: "start", label: "At the start of the school year" }, { value: "worn", label: "When my current pair wears out" }, { value: "like", label: "Whenever I find something I like" }, { value: "rain", label: "Right after one rainy day reminds me I need them" }
         ] }); },
-        country() { render({ title: "Which country are you joining from?", prompt: "this giveaway is only open to US &amp; CA participants at this time, excluding Quebec.", options: [
+        country() { render({ title: "Which country are you in?", prompt: "Open to the US and Canada, excluding Quebec.", options: [
           { value: "canada", label: "Canada" }, { value: "us", label: "United States" }, { value: "other", label: "Other" }
         ] }); },
         state() {
@@ -1413,11 +1413,11 @@
           const provinces = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Saskatchewan", "Yukon"];
           regionSelect("What province?", provinces);
         },
-        contact_first() { textFieldRoute({ title: "Great, what's your first name?", key: "first", next: "contact_last", autocomplete: "given-name" }); },
-        contact_last() { textFieldRoute({ title: "and last name?", key: "last", next: "contact_email", autocomplete: "family-name" }); },
-        contact_email() { textFieldRoute({ title: "Your email address", prompt: "*Required. This is how we’ll send you the results + extra perks", key: "email", next: "contact_phone", type: "email", autocomplete: "email" }); },
-        contact_phone() { textFieldRoute({ title: "and your phone number", prompt: "So you'll be sure not to miss the results! Not Required.", key: "phone", next: "age", type: "tel", autocomplete: "tel", required: false }); },
-        age() { render({ title: "Select your age range.", options: [
+        contact_first() { textFieldRoute({ title: "What's your first name?", key: "first", next: "contact_last", autocomplete: "given-name" }); },
+        contact_last() { textFieldRoute({ title: "And your last name?", key: "last", next: "contact_email", autocomplete: "family-name" }); },
+        contact_email() { textFieldRoute({ title: "What's your email?", prompt: "Required. We'll email the results and extra perks.", key: "email", next: "contact_phone", type: "email", autocomplete: "email" }); },
+        contact_phone() { textFieldRoute({ title: "What's your phone number?", prompt: "Optional.", key: "phone", next: "age", type: "tel", autocomplete: "tel", required: false }); },
+        age() { render({ title: "Are you 18 or older?", options: [
           { value: "under18", label: "Under 18 years" }, { value: "18plus", label: "18+" }
         ] }); },
         terms() { render({
