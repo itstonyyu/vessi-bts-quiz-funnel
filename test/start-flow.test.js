@@ -20,7 +20,7 @@ test("selected questions use full-width, decorative lifestyle images", () => {
   assert.match(html, /\.question-accent\s*{[\s\S]*?width: 100%;[\s\S]*?height: 160px;/);
   assert.match(html, /\.shell\.quiz-started \.question-accent\s*{[\s\S]*?height: 120px;/);
   assert.match(html, /@media \(min-width: 1025px\) and \(max-height: 760px\)[\s\S]*?\.shell\.quiz-started \.question-accent\s*{\s*display: none;/);
-  assert.match(html, /<figure class="question-accent" aria-hidden="true"><img src="\$\{media\}" alt="" loading="lazy" decoding="async"><\/figure>/);
+  assert.match(html, /<figure class="question-accent \$\{mediaClass\}" aria-hidden="true"><img src="\$\{media\}" alt="" loading="lazy" decoding="async"><\/figure>/);
   assert.match(html, /student_rain\(\)[\s\S]*?media: "img\/question-student-rain\.jpg"/);
   assert.match(html, /student_lifestyle\(\)[\s\S]*?media: "img\/question-student-commute\.jpg"/);
   assert.match(html, /teacher_rain\(\)[\s\S]*?media: "img\/question-teacher-rain\.jpg"/);

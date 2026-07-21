@@ -3,26 +3,46 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Find your waterproof back-to-school Vessi match and enter the giveaway.">
-    <title>Vessi Back-to-School Match Quiz</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description" content="Find your 100% waterproof Vessi match and enter the back-to-school giveaway.">
+    <title>Vessi back-to-school match quiz</title>
     <style>
+      /* These files are the exact production assets published by vessi.com. */
+      @font-face {
+        font-family: 'Noi Grotesk';
+        src: url('./fonts/NoiGrotesk-Regular.woff2') format('woff2');
+        font-display: swap;
+        font-style: normal;
+        font-weight: 400;
+      }
+
+      @font-face {
+        font-family: 'Noi Grotesk';
+        src: url('./fonts/NoiGrotesk-Medium.woff2') format('woff2');
+        font-display: swap;
+        font-style: normal;
+        font-weight: 500;
+      }
+
+      @font-face {
+        font-family: 'ABCDiatypeMono';
+        src: url('./fonts/ABCDiatypeMono-Regular.woff2') format('woff2');
+        font-display: swap;
+        font-style: normal;
+        font-weight: 400;
+      }
+
       :root {
-        --ink: #171512;
-        --muted: #6a625b;
-        --paper: #f4f0e9;
-        --panel: #fffaf3;
-        --mist: #dcebe2;
-        --moss: #526d58;
-        --moss-dark: #2f4738;
-        --clay: #df7f5f;
-        --sun: #f4c24f;
-        --aqua: #c9e5e9;
-        --line: rgba(36, 31, 27, 0.14);
-        --shadow: 0 24px 80px rgba(36, 31, 27, 0.14);
-        --radius: 8px;
+        --vessi-blue: #0069F0;
+        --vessi-ink: #28201A;
+        --vessi-white: #FFFFFF;
+        --vessi-border: #E6E6E6;
+        --vessi-grey: #D8D8D8;
+        --vessi-bone: #F4F0E9;
+        --vessi-sky: #4D96F5;
+        --vessi-scrim: rgba(85, 83, 70, 0.5);
+        --muted-ink: rgba(40, 32, 26, 0.7);
+        --shadow: 0 24px 80px rgba(40, 32, 26, 0.14);
+        --card-radius: 25px;
       }
 
       * {
@@ -31,18 +51,17 @@
 
       html {
         min-height: 100%;
-        background: var(--paper);
-        color: var(--ink);
-        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--vessi-white);
+        color: var(--vessi-ink);
+        font-family: 'Noi Grotesk', Arial, sans-serif;
+        font-weight: 400;
         letter-spacing: 0;
       }
 
       body {
         min-height: 100%;
         margin: 0;
-        background:
-          linear-gradient(125deg, rgba(201, 229, 233, 0.64), rgba(244, 240, 233, 0.2) 42%, rgba(244, 194, 79, 0.14)),
-          var(--paper);
+        background: var(--vessi-white);
       }
 
       button,
@@ -53,6 +72,20 @@
 
       button {
         cursor: pointer;
+      }
+
+      button,
+      a,
+      label {
+        font-weight: 500;
+      }
+
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--vessi-blue);
+        outline-offset: 2px;
       }
 
       a {
@@ -105,18 +138,15 @@
         flex-direction: column;
         padding: 32px;
         overflow: hidden;
-        background: #314d3b;
-        color: #fffaf2;
+        background: var(--vessi-blue);
+        color: var(--vessi-white);
       }
 
       .brand-panel::before {
         content: "";
         position: absolute;
         inset: 0;
-        background:
-          linear-gradient(180deg, rgba(23, 21, 18, 0.04), rgba(23, 21, 18, 0.28)),
-          radial-gradient(circle at 80% 16%, rgba(244, 194, 79, 0.28), transparent 26%),
-          radial-gradient(circle at 8% 82%, rgba(201, 229, 233, 0.32), transparent 28%);
+        background: linear-gradient(180deg, transparent, var(--vessi-scrim));
         pointer-events: none;
       }
 
@@ -136,18 +166,18 @@
 
       .logo {
         font-size: 16px;
-        font-weight: 900;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
+        font-weight: 500;
       }
 
       .campaign-pill {
-        border: 1px solid rgba(255, 250, 242, 0.42);
-        border-radius: 999px;
+        border: 1px solid var(--vessi-sky);
+        border-radius: 9999px;
         padding: 8px 12px;
-        color: rgba(255, 250, 242, 0.86);
+        color: var(--vessi-white);
+        font-family: 'ABCDiatypeMono', Arial, sans-serif;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: 400;
+        letter-spacing: 0.02em;
         text-transform: uppercase;
         white-space: nowrap;
       }
@@ -165,9 +195,9 @@
         position: relative;
         min-height: 160px;
         overflow: hidden;
-        border: 1px solid rgba(255, 250, 242, 0.2);
-        border-radius: var(--radius);
-        background: rgba(255, 250, 242, 0.08);
+        border: 1px solid var(--vessi-sky);
+        border-radius: var(--card-radius);
+        background: var(--vessi-white);
       }
 
       .media-card.large {
@@ -184,27 +214,31 @@
       .media-card.product {
         display: grid;
         place-items: center;
-        background: linear-gradient(145deg, #f4f0e9, #c9e5e9);
+        background: var(--vessi-white);
       }
 
       .media-card.product img {
         width: 90%;
         height: auto;
         object-fit: contain;
-        filter: drop-shadow(0 18px 24px rgba(23, 21, 18, 0.18));
+        filter: drop-shadow(0 18px 24px rgba(40, 32, 26, 0.18));
       }
 
       .media-caption {
         position: absolute;
         left: 12px;
         bottom: 12px;
-        border-radius: 999px;
+        border-radius: 9999px;
         padding: 7px 10px;
-        background: rgba(23, 21, 18, 0.72);
-        color: #fffaf2;
+        background: var(--vessi-scrim);
+        color: var(--vessi-white);
+        font-family: 'ABCDiatypeMono', Arial, sans-serif;
         font-size: 11px;
-        font-weight: 900;
+        font-weight: 400;
+        letter-spacing: 0.02em;
         text-transform: uppercase;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
       }
 
       .brand-bottom {
@@ -215,16 +249,16 @@
       .brand-bottom h1 {
         max-width: 560px;
         margin: 0 0 16px;
-        font-size: clamp(44px, 6vw, 84px);
-        font-weight: 900;
-        line-height: 0.95;
+        font-size: clamp(44px, 6vw, 72px);
+        font-weight: 500;
+        line-height: 1.2;
         letter-spacing: 0;
       }
 
       .brand-bottom p {
         max-width: 470px;
         margin: 0;
-        color: rgba(255, 250, 242, 0.86);
+        color: var(--vessi-white);
         font-size: 17px;
         line-height: 1.55;
       }
@@ -234,28 +268,28 @@
         display: grid;
         align-items: center;
         padding: 48px;
+        background: var(--vessi-white);
       }
 
       .quiz-card {
         width: min(100%, 760px);
         margin: 0 auto;
-        background: rgba(255, 250, 243, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.72);
-        border-radius: var(--radius);
+        background: var(--vessi-white);
+        border: 1px solid var(--vessi-border);
+        border-radius: var(--card-radius);
         box-shadow: var(--shadow);
         overflow: hidden;
-        backdrop-filter: blur(18px);
       }
 
       .progress-wrap {
         height: 8px;
-        background: rgba(57, 90, 69, 0.12);
+        background: var(--vessi-grey);
       }
 
       .progress-bar {
         width: 0%;
         height: 100%;
-        background: linear-gradient(90deg, var(--moss), var(--clay));
+        background: var(--vessi-blue);
         transition: width 320ms ease;
       }
 
@@ -284,18 +318,20 @@
 
       .kicker {
         margin: 0 0 16px;
-        color: var(--moss-dark);
+        color: var(--vessi-blue);
+        font-family: 'ABCDiatypeMono', Arial, sans-serif;
         font-size: 13px;
-        font-weight: 800;
-        letter-spacing: 0.12em;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+        line-height: 1.3;
         text-transform: uppercase;
       }
 
       h2 {
         margin: 0;
         font-size: clamp(34px, 5vw, 58px);
-        font-weight: 900;
-        line-height: 1;
+        font-weight: 500;
+        line-height: 1.2;
         letter-spacing: 0;
       }
 
@@ -308,7 +344,7 @@
       .prompt {
         margin: 18px 0 0;
         max-width: 610px;
-        color: var(--muted);
+        color: var(--muted-ink);
         font-size: 18px;
         line-height: 1.55;
       }
@@ -320,9 +356,9 @@
         height: 160px;
         margin: 18px 0 0;
         overflow: hidden;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: var(--mist);
+        border: 1px solid var(--vessi-border);
+        border-radius: var(--card-radius);
+        background: var(--vessi-white);
       }
 
       .question-accent img {
@@ -344,21 +380,19 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
+        border: 1px solid var(--vessi-border);
+        border-radius: var(--card-radius);
         padding: 16px;
-        background: rgba(255, 255, 255, 0.72);
-        color: var(--ink);
+        background: var(--vessi-white);
+        color: var(--vessi-ink);
         text-align: left;
         transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
       }
 
-      .option:hover,
-      .option:focus-visible {
-        border-color: rgba(57, 90, 69, 0.55);
-        background: #fff;
+      .option:hover {
+        border-color: var(--vessi-blue);
+        background: var(--vessi-white);
         transform: translateY(-1px);
-        outline: none;
       }
 
       .option-key {
@@ -368,14 +402,15 @@
         display: grid;
         place-items: center;
         border-radius: 50%;
-        background: var(--mist);
-        color: var(--moss-dark);
+        background: var(--vessi-blue);
+        color: var(--vessi-white);
+        font-family: 'ABCDiatypeMono', Arial, sans-serif;
         font-size: 13px;
-        font-weight: 800;
+        font-weight: 400;
       }
 
       .option span:last-child {
-        font-weight: 750;
+        font-weight: 500;
         line-height: 1.3;
       }
 
@@ -390,9 +425,9 @@
       .primary,
       .secondary {
         min-height: 50px;
-        border-radius: var(--radius);
+        border-radius: 9999px;
         padding: 0 20px;
-        font-weight: 800;
+        font-weight: 500;
         text-decoration: none;
       }
 
@@ -400,22 +435,22 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid var(--ink);
-        background: var(--ink);
-        color: #fffaf2;
+        border: 1px solid var(--vessi-blue);
+        background: var(--vessi-blue);
+        color: var(--vessi-white);
       }
 
       .secondary {
-        border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.52);
-        color: var(--ink);
+        border: 1px solid var(--vessi-border);
+        background: var(--vessi-white);
+        color: var(--vessi-ink);
       }
 
       .ghost {
         border: 0;
         background: transparent;
-        color: var(--muted);
-        font-weight: 800;
+        color: var(--muted-ink);
+        font-weight: 500;
       }
 
       .form-grid {
@@ -435,26 +470,25 @@
       }
 
       label {
-        color: var(--muted);
+        color: var(--muted-ink);
         font-size: 13px;
-        font-weight: 800;
+        font-weight: 500;
       }
 
       input,
       select {
         width: 100%;
         min-height: 52px;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
+        border: 1px solid var(--vessi-border);
+        border-radius: 9999px;
         padding: 0 14px;
-        background: #fff;
-        color: var(--ink);
+        background: var(--vessi-white);
+        color: var(--vessi-ink);
       }
 
-      input:focus,
-      select:focus {
-        border-color: var(--moss);
-        outline: 3px solid rgba(95, 127, 104, 0.18);
+      input:focus-visible,
+      select:focus-visible {
+        border-color: var(--vessi-blue);
       }
 
       .checkbox-row {
@@ -462,7 +496,7 @@
         align-items: flex-start;
         gap: 10px;
         margin-top: 18px;
-        color: var(--muted);
+        color: var(--muted-ink);
         font-size: 13px;
         line-height: 1.45;
       }
@@ -475,7 +509,7 @@
 
       .mini-note {
         margin-top: 10px;
-        color: var(--muted);
+        color: var(--muted-ink);
         font-size: 13px;
         line-height: 1.45;
       }
@@ -486,16 +520,16 @@
         gap: 24px;
         align-items: center;
         margin-top: 28px;
-        border: 1px solid rgba(95, 127, 104, 0.28);
-        border-left: 5px solid var(--moss);
-        border-radius: var(--radius);
+        border: 1px solid var(--vessi-sky);
+        border-left: 5px solid var(--vessi-blue);
+        border-radius: var(--card-radius);
         padding: 20px;
-        background: rgba(216, 231, 225, 0.42);
+        background: var(--vessi-white);
       }
 
       .insight-card p {
         margin: 8px 0 0;
-        color: var(--muted);
+        color: var(--muted-ink);
         line-height: 1.5;
       }
 
@@ -503,7 +537,7 @@
         width: 100%;
         max-width: 180px;
         justify-self: center;
-        filter: drop-shadow(0 18px 24px rgba(36, 31, 27, 0.16));
+        filter: drop-shadow(0 18px 24px rgba(40, 32, 26, 0.16));
       }
 
       .result-layout {
@@ -516,9 +550,9 @@
 
       .result-card,
       .profile-card {
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid var(--vessi-border);
+        border-radius: var(--card-radius);
+        background: var(--vessi-white);
         padding: 18px;
       }
 
@@ -527,14 +561,14 @@
         max-width: 240px;
         display: block;
         margin: 0 auto 12px;
-        filter: drop-shadow(0 18px 28px rgba(36, 31, 27, 0.18));
+        filter: drop-shadow(0 18px 28px rgba(40, 32, 26, 0.18));
       }
 
       .lifestyle-art {
         width: 100%;
         aspect-ratio: 1 / 1;
         margin-top: 14px;
-        border-radius: var(--radius);
+        border-radius: var(--card-radius);
         object-fit: cover;
         display: block;
       }
@@ -542,7 +576,7 @@
       .result-name {
         margin: 0 0 8px;
         font-size: 20px;
-        font-weight: 850;
+        font-weight: 500;
       }
 
       .benefit-list {
@@ -556,7 +590,7 @@
       .benefit-list li {
         display: flex;
         gap: 10px;
-        color: var(--muted);
+        color: var(--muted-ink);
         line-height: 1.45;
       }
 
@@ -567,7 +601,7 @@
         flex: 0 0 auto;
         margin-top: 8px;
         border-radius: 50%;
-        background: var(--clay);
+        background: var(--vessi-blue);
       }
 
       .profile-card {
@@ -582,21 +616,25 @@
       }
 
       .profile-item {
-        border-radius: var(--radius);
-        background: rgba(247, 241, 232, 0.8);
+        border: 1px solid var(--vessi-border);
+        border-radius: var(--card-radius);
+        background: var(--vessi-white);
         padding: 12px;
       }
 
       .profile-item strong {
         display: block;
         margin-bottom: 4px;
+        color: var(--vessi-blue);
+        font-family: 'ABCDiatypeMono', Arial, sans-serif;
         font-size: 12px;
+        font-weight: 400;
+        letter-spacing: 0.02em;
         text-transform: uppercase;
-        color: var(--moss-dark);
       }
 
       .profile-item span {
-        color: var(--muted);
+        color: var(--muted-ink);
         font-size: 14px;
         line-height: 1.35;
       }
@@ -604,9 +642,9 @@
       .error {
         min-height: 18px;
         margin-top: 14px;
-        color: #9b3528;
+        color: var(--vessi-ink);
         font-size: 14px;
-        font-weight: 800;
+        font-weight: 500;
       }
 
       .footer-trust {
@@ -626,18 +664,18 @@
       .image-strip img {
         width: 100%;
         aspect-ratio: 1 / 1;
-        border-radius: var(--radius);
+        border-radius: var(--card-radius);
         object-fit: cover;
         display: block;
       }
 
       .trust-pill {
         border-radius: 999px;
-        border: 1px solid var(--line);
+        border: 1px solid var(--vessi-border);
         padding: 8px 11px;
-        color: var(--muted);
+        color: var(--muted-ink);
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 500;
         background: rgba(255, 255, 255, 0.56);
       }
 
@@ -752,7 +790,7 @@
 
         .brand-bottom h1 {
           font-size: 42px;
-          line-height: 0.98;
+          line-height: 1.2;
         }
 
         .quiz-panel {
@@ -791,7 +829,7 @@
 
         .shell.quiz-started .quiz-card {
           min-height: calc(100dvh - 24px);
-          box-shadow: 0 12px 40px rgba(36, 31, 27, 0.1);
+          box-shadow: 0 12px 40px rgba(40, 32, 26, 0.1);
         }
 
         .shell.quiz-started .screen {
@@ -818,6 +856,10 @@
           width: 100%;
           height: 120px;
           margin-top: 14px;
+        }
+
+        .question-accent--teacher-workday img {
+          object-position: right center;
         }
 
         .shell.quiz-started .question-accent + .option-grid {
@@ -930,7 +972,7 @@
         <div class="brand-media" aria-hidden="true">
           <div class="media-card large">
             <img src="img/brand-work.jpg" alt="">
-            <span class="media-caption">Rain ready</span>
+            <span class="media-caption">Weather-Free</span>
           </div>
           <div class="media-card">
             <img src="img/weekend-neo-lifestyle.jpg" alt="">
@@ -942,8 +984,8 @@
           </div>
         </div>
         <div class="brand-bottom">
-          <h1>Find your waterproof school-day sneaker.</h1>
-          <p>Answer a few quick questions, get matched to the Vessi pair built for your day, and enter the back-to-school giveaway.</p>
+          <h1>Dress for your day, not the forecast.</h1>
+          <p>Answer a few quick questions to find your Vessi match and enter the back-to-school giveaway—whatever the forecast.</p>
         </div>
       </aside>
 
@@ -964,24 +1006,24 @@
 
       const products = {
         classic: {
-          name: "Weekend Classic",
-          short: "Waterproof everyday sneaker",
+          name: "Women's Weekend Classic — Marble White",
+          short: "100% waterproof sneaker",
           image: "img/weekend-classic.png",
           lifestyle: "img/weekend-classic-lifestyle.jpg",
           url: "https://vessi.com/products/womens-weekend-classic-marble-white",
           cta: "Shop Weekend Classic"
         },
         neo: {
-          name: "Weekend Neo",
-          short: "Comfort-first waterproof sneaker",
+          name: "Men's Weekend Neo — Black/White",
+          short: "100% waterproof sneaker",
           image: "img/weekend-neo.png",
           lifestyle: "img/weekend-neo-lifestyle.jpg",
           url: "https://vessi.com/products/mens-weekend-neo-black-white",
           cta: "Shop Weekend Neo"
         },
         slip: {
-          name: "Weekend Slip-On",
-          short: "Easy on/off waterproof sneaker",
+          name: "Men's Weekend Slip-On — Black/White",
+          short: "100% waterproof sneaker",
           image: "img/weekend-slip-on.png",
           lifestyle: "img/brand-everyday.jpg",
           url: "https://vessi.com/products/mens-weekend-slip-on-black-white",
@@ -1056,7 +1098,7 @@
         }, options);
       }
 
-      function render({ kicker, title, prompt, media = null, options = [], body = "", actions = "", progress = null, onRendered = null }) {
+      function render({ kicker, title, prompt, media = null, mediaClass = "", options = [], body = "", actions = "", progress = null, onRendered = null }) {
         const isLanding = state.step === "welcome";
         shell.classList.toggle("quiz-started", !isLanding);
         shell.dataset.view = isLanding ? "landing" : "quiz";
@@ -1070,7 +1112,7 @@
             ${kicker ? `<p class="kicker">${kicker}</p>` : ""}
             <h2 tabindex="-1">${title}</h2>
             ${prompt ? `<p class="prompt">${prompt}</p>` : ""}
-            ${media ? `<figure class="question-accent" aria-hidden="true"><img src="${media}" alt="" loading="lazy" decoding="async"></figure>` : ""}
+            ${media ? `<figure class="question-accent ${mediaClass}" aria-hidden="true"><img src="${media}" alt="" loading="lazy" decoding="async"></figure>` : ""}
             ${body}
             ${options.length ? `<div class="option-grid">${options.map((option, index) => `
               <button class="option" type="button" data-value="${option.value}" data-tags="${(option.tags || []).join(",")}" data-label="${option.label.replace(/"/g, "&quot;")}">
@@ -1183,14 +1225,14 @@
         welcome() {
           render({
             kicker: "Back-to-school giveaway",
-            title: "Find your waterproof back-to-school sneaker.",
-            prompt: "Answer a few quick questions and we will match you with the Vessi pair built for your school day. Your entry is included when you complete the quiz.",
+            title: "Dress for your day, not the forecast.",
+            prompt: "Answer a few quick questions to find your 100% waterproof Vessi match and enter the back-to-school giveaway.",
             body: `
               <div class="footer-trust">
-                <span class="trust-pill">Waterproof</span>
-                <span class="trust-pill">Lightweight comfort</span>
-                <span class="trust-pill">Easy to clean</span>
-                <span class="trust-pill">Made for rainy school days</span>
+                <span class="trust-pill">100% waterproof</span>
+                <span class="trust-pill">Lightweight and breathable</span>
+                <span class="trust-pill">365-Day Waterproof Guarantee</span>
+                <span class="trust-pill">Dyma-tex® knit</span>
               </div>
               <div class="image-strip" aria-label="Vessi product and lifestyle images">
                 <img src="img/weekend-classic-lifestyle.jpg" alt="White Vessi sneakers with water droplets">
@@ -1198,7 +1240,7 @@
                 <img src="img/weekend-neo-lifestyle.jpg" alt="Vessi sneaker stepping through water">
               </div>
             `,
-            actions: `${button("Find My Match", "start")}<a class="secondary" href="https://vessi.com/" data-track="cta_clicked" data-track-section="welcome">Shop Vessi</a>`,
+            actions: `${button("Find my match", "start")}<a class="secondary" href="https://vessi.com/" data-track="cta_clicked" data-track-section="welcome">Shop Vessi</a>`,
             progress: 3
           });
           attachActions();
@@ -1263,24 +1305,24 @@
             title: "When it rains, what do you usually wear to class?",
             media: "img/question-student-rain.jpg",
             options: [
-              { value: "regular", label: "Regular sneakers and hope they survive", tags: ["wet_style_conflict", "waterproof_need"] },
-              { value: "white", label: "White sneakers I immediately regret", tags: ["wet_style_conflict", "easy_clean_need"] },
-              { value: "boots", label: "Boots, even though they feel bulky", tags: ["bulky_boot_problem", "lightweight_need"] },
-              { value: "outfit", label: "Whatever matches my outfit, even if my feet get wet", tags: ["wet_style_conflict", "style_need"] },
-              { value: "backup", label: "I bring or change into another pair", tags: ["backup_pair_problem", "one_pair_need"] }
+              { value: "regular", label: "Regular sneakers", tags: ["wet_style_conflict", "waterproof_need"] },
+              { value: "white", label: "White sneakers", tags: ["wet_style_conflict", "easy_clean_need"] },
+              { value: "boots", label: "Rain boots", tags: ["bulky_boot_problem", "lightweight_need"] },
+              { value: "outfit", label: "Whatever matches my outfit", tags: ["wet_style_conflict", "style_need"] },
+              { value: "backup", label: "I bring a second pair", tags: ["backup_pair_problem", "one_pair_need"] }
             ]
           });
         },
         student_pain() {
           render({
             kicker: "Student match",
-            title: "What is the most annoying part of rainy campus days?",
+            title: "What matters most on rainy campus days?",
             options: [
-              { value: "socks", label: "Wet socks", tags: ["waterproof_need"] },
-              { value: "walks", label: "Long walks in uncomfortable shoes", tags: ["comfort_need"] },
-              { value: "dirty", label: "Shoes getting dirty", tags: ["easy_clean_need"] },
-              { value: "style", label: "Choosing between style and staying dry", tags: ["style_need"] },
-              { value: "carry", label: "Carrying a backup pair", tags: ["one_pair_need"] }
+              { value: "socks", label: "Dry socks", tags: ["waterproof_need"] },
+              { value: "walks", label: "Comfortable campus walks", tags: ["comfort_need"] },
+              { value: "dirty", label: "Simple shoe care", tags: ["easy_clean_need"] },
+              { value: "style", label: "Everyday sneaker style", tags: ["style_need"] },
+              { value: "carry", label: "One pair for the day", tags: ["one_pair_need"] }
             ]
           });
         },
@@ -1304,7 +1346,7 @@
             title: "Are you planning to buy back-to-school shoes soon?",
             options: [
               { value: "active", label: "Yes, I am actively looking", tags: ["high_intent"] },
-              { value: "maybe", label: "Maybe, if I find the right pair or deal", tags: ["medium_intent", "deal_sensitive"] },
+              { value: "maybe", label: "Maybe, if I find the right pair", tags: ["medium_intent", "deal_sensitive"] },
               { value: "giveaway", label: "Not yet, mostly entering the giveaway", tags: ["low_intent"] }
             ]
           });
@@ -1337,10 +1379,10 @@
             title: "When it rains, what do you usually wear to school?",
             media: "img/question-teacher-rain.jpg",
             options: [
-              { value: "regular", label: "Regular sneakers and hope for the best", tags: ["waterproof_need"] },
-              { value: "flats", label: "Flats or loafers that are not really waterproof", tags: ["waterproof_need", "style_need"] },
-              { value: "boots", label: "Bulky rain boots I do not want to wear all day", tags: ["bulky_boot_problem", "lightweight_need"] },
-              { value: "old", label: "An old pair I do not mind wrecking", tags: ["easy_clean_need"] },
+              { value: "regular", label: "Regular sneakers", tags: ["waterproof_need"] },
+              { value: "flats", label: "Flats or loafers", tags: ["waterproof_need", "style_need"] },
+              { value: "boots", label: "Rain boots", tags: ["bulky_boot_problem", "lightweight_need"] },
+              { value: "old", label: "An older pair", tags: ["easy_clean_need"] },
               { value: "backup", label: "I bring a backup pair", tags: ["one_pair_need"] }
             ]
           });
@@ -1348,21 +1390,22 @@
         teacher_pain() {
           render({
             kicker: "Teacher match",
-            title: "What tends to go wrong with that option?",
+            title: "What would make rainy school days easier?",
             options: [
-              { value: "socks", label: "My socks get damp", tags: ["waterproof_need"] },
-              { value: "tired", label: "My feet feel tired", tags: ["comfort_need"] },
-              { value: "dirty", label: "My shoes get dirty or gross", tags: ["easy_clean_need"] },
-              { value: "clunky", label: "I am stuck wearing clunky rain shoes all day", tags: ["lightweight_need"] },
-              { value: "style", label: "I avoid wearing shoes I actually like", tags: ["style_need"] }
+              { value: "socks", label: "Dry socks", tags: ["waterproof_need"] },
+              { value: "tired", label: "Lightweight comfort", tags: ["comfort_need"] },
+              { value: "dirty", label: "Simple shoe care", tags: ["easy_clean_need"] },
+              { value: "clunky", label: "A lighter option", tags: ["lightweight_need"] },
+              { value: "style", label: "Everyday sneaker style", tags: ["style_need"] }
             ]
           });
         },
         teacher_use() {
           render({
             kicker: "Teacher match",
-            title: "Where do your shoes need to hold up?",
+            title: "Where do you want Weather-Free comfort?",
             media: "img/question-teacher-workday.jpg",
+            mediaClass: "question-accent--teacher-workday",
             options: [
               { value: "commute", label: "Rainy commutes", tags: ["waterproof_need"] },
               { value: "hallway", label: "Classroom and hallway duty", tags: ["comfort_need"] },
@@ -1378,7 +1421,7 @@
             title: "Are you considering new school shoes in the next 30 days?",
             options: [
               { value: "yes", label: "Yes, before or near the start of school", tags: ["high_intent"] },
-              { value: "maybe", label: "Maybe, if the fit or deal is right", tags: ["medium_intent", "deal_sensitive"] },
+              { value: "maybe", label: "Maybe, if the fit is right", tags: ["medium_intent", "deal_sensitive"] },
               { value: "later", label: "Not right now", tags: ["low_intent"] }
             ]
           });
@@ -1475,7 +1518,7 @@
               <p class="mini-note">No purchase necessary. Eligibility restrictions and giveaway terms apply.</p>
               <p class="error" id="formError"></p>
             `,
-            actions: `${button("See My Result", "results")}${button("Back", "back", "ghost")}`,
+            actions: `${button("See my result", "results")}${button("Back", "back", "ghost")}`,
             onRendered() {
               document.getElementById("termsCheck")?.addEventListener("change", (event) => {
                 state.terms_accepted = event.target.checked;
@@ -1539,7 +1582,7 @@
               <img src="${product.image}" alt="${product.name} waterproof sneaker">
             </div>
           `,
-          actions: `${button("Continue to Entry", "school")}${button("Back", "back", "ghost")}`
+          actions: `${button("Continue to entry", "school")}${button("Back", "back", "ghost")}`
         });
         attachActions();
       }
@@ -1608,28 +1651,27 @@
 
       function painLine() {
         const tags = state.tags;
-        if (tags.has("comfort_need") || tags.has("high_comfort_need")) return "lightweight support for long days on your feet";
-        if (tags.has("easy_clean_need") || tags.has("easy_clean_school")) return "easy-clean waterproof protection for spills, puddles, and messy weather";
-        if (tags.has("one_pair_need")) return "one pair that works from commute to class to after-school plans";
-        if (tags.has("style_need") || tags.has("wet_style_conflict")) return "waterproof protection without giving up your everyday sneaker look";
-        return "dry socks and everyday comfort when the weather turns";
+        if (tags.has("comfort_need") || tags.has("high_comfort_need")) return "lightweight and breathable comfort";
+        if (tags.has("easy_clean_need") || tags.has("easy_clean_school")) return "machine-friendly care with a rinse, mild soap, and air drying";
+        if (tags.has("one_pair_need")) return "100% waterproof, lightweight comfort";
+        if (tags.has("style_need") || tags.has("wet_style_conflict")) return "dry socks and flexible waterproof knit";
+        return "dry socks and year-round comfort";
       }
 
       function microProof() {
-        if (state.role === "teacher") return "Built for rainy commutes, wet floors, recess duty, and full days when regular shoes do not cut it.";
-        return "Built for rainy campus walks, class, errands, and the outfits you actually want to wear.";
+        return "100% waterproof with patented Dyma-tex® knit. Lightweight and breathable, backed by our 365-Day Waterproof Guarantee.";
       }
 
       function studentInsight(product) {
-        if (product === products.neo) return "Your answers point to long walks and comfort as the real problem. You need waterproof sneakers that can handle campus mileage, not just rain.";
-        if (product === products.slip) return "Your answers point to convenience and one-pair versatility. You need a waterproof sneaker that is easy to wear, easy to repeat, and simple to clean.";
-        return "Your answers point to the classic campus tradeoff: stay dry or look good. You need a waterproof sneaker that still looks like an everyday sneaker.";
+        if (product === products.neo) return "You prioritized campus walks and comfort. Your match combines 100% waterproof protection with lightweight, breathable knit.";
+        if (product === products.slip) return "You prioritized one-pair convenience. Your match is 100% waterproof, lightweight, and breathable.";
+        return "You prioritized dry socks and everyday sneaker style. Your match uses flexible, 100% waterproof knit.";
       }
 
       function teacherInsight(product) {
-        if (product === products.neo) return "Your answers point to full-day comfort. You need a waterproof sneaker that handles standing, hallway movement, rainy commutes, and after-school errands.";
-        if (product === products.slip) return "Your answers point to easy daily use. You need a waterproof sneaker that is quick to wear and reliable when the school day gets messy.";
-        return "Your answers point to rainy-day style and dry feet. You need waterproof protection without being stuck in bulky rain boots all day.";
+        if (product === products.neo) return "You prioritized lightweight comfort. Your match combines 100% waterproof protection with breathable knit.";
+        if (product === products.slip) return "You prioritized simple daily wear. Your match is 100% waterproof, lightweight, and breathable.";
+        return "You prioritized dry socks and everyday sneaker style. Your match uses flexible, 100% waterproof knit.";
       }
 
       function intentBucket() {
@@ -1641,13 +1683,13 @@
       function resultCopy(product) {
         const rolePhrase = state.role === "teacher" ? "school-day" : "campus";
         const urgency = intentBucket() === "high_intent"
-          ? `Want your pair before classes start? Shop your match now. Your giveaway entry stays active.`
+          ? `Your match is ready whenever you are. Your giveaway entry stays active.`
           : intentBucket() === "medium_intent"
-            ? `Save your match and compare it when you are ready. This page is built around the reason you chose: ${painLine()}.`
-            : `You are entered. If the weather turns before winners are announced, your match is ready.`;
+            ? `Save your match and compare it when you are ready. You prioritized ${painLine()}.`
+            : `You are entered. Whatever the forecast, your match is ready when you are.`;
         return {
           headline: `You are entered. Your ${rolePhrase} match is ${product.name}.`,
-          body: `Based on your answers, you need ${painLine()}. ${product.name} is built for ${state.role === "teacher" ? "long school days, rainy commutes, wet floors, and classroom movement" : "rainy campus days, class, errands, and everyday outfits"}.`,
+          body: `Based on your answers, you prioritized ${painLine()}. ${product.name} uses 100% waterproof Dyma-tex® knit, with waterproofing built into the knit instead of a coating.`,
           urgency
         };
       }
@@ -1705,9 +1747,8 @@
             </div>
           `,
           actions: `
-            <a class="primary" href="${ctaUrl}" data-track="cta_clicked" data-track-section="results" data-track-text="Shop My Match">Shop My Match</a>
-            <a class="secondary" href="https://vessi.com/">Share With My School</a>
-            ${button("Start Over", "restart", "ghost")}
+            <a class="primary" href="${ctaUrl}" data-track="cta_clicked" data-track-section="results" data-track-text="Shop my match">Shop my match</a>
+            ${button("Start over", "restart", "ghost")}
           `,
           progress: 100,
           onRendered() {
@@ -1735,7 +1776,7 @@
               <img src="img/weekend-classic.png" alt="Weekend Classic waterproof sneaker">
             </div>
           `,
-          actions: `<a class="primary" href="https://vessi.com/">Shop Vessi</a>${button("Start Over", "restart", "ghost")}`,
+          actions: `<a class="primary" href="https://vessi.com/">Shop Vessi</a>${button("Start over", "restart", "ghost")}`,
           progress: 100,
           onRendered() {
             screen.querySelector('[data-action="restart"]').addEventListener("click", () => {
