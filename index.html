@@ -1214,6 +1214,7 @@
         marketing_consent: false,
         consent_date: "",
         terms_accepted: false,
+        terms_initialized: false,
         entry_completed_at: ""
       };
 
@@ -1449,12 +1450,15 @@
         age() { render({ title: "Are you 18 or older?", options: [
           { value: "under18", label: "Under 18 years" }, { value: "18plus", label: "18+" }
         ] }); },
-        terms() { render({
+        terms() {
+          if (!state.terms_initialized) { state.terms_accepted = true; state.terms_initialized = true; syncUpdate(); }
+          render({
           title: "Do you accept this Giveaway's <a href=\"https://ca.vessi.com/pages/terms-conditions-teachers-giveaway-2023\" target=\"_blank\" rel=\"noopener\">terms and conditions?</a>",
           body: `<label class="checkbox-row"><input id="termsCheck" type="checkbox" aria-describedby="formError" ${state.terms_accepted ? "checked" : ""}><span>I accept</span></label><p class="error" id="formError" role="alert" aria-live="polite"></p>`,
           actions: `${button("Submit", "results")}${button("Back", "back", "ghost")}`,
           onRendered() { document.getElementById("termsCheck")?.addEventListener("change", (event) => { state.terms_accepted = event.target.checked; syncUpdate(); }); }
-        }); },
+          });
+        },
         results() { renderThankYou(); }
       };
 
