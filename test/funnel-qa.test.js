@@ -18,6 +18,16 @@ test("thank-you screen never exposes internal segmentation or quiz diagnostics",
   assert.match(html, /That’s it! You’ve been entered into the giveaway\./);
 });
 
+test("result screen turns giveaway completion into a personalized shopping handoff", () => {
+  assert.match(html, /function getRecommendation\(\)/);
+  assert.match(html, /Your Vessi match:/);
+  assert.match(html, /Shop my Vessi match/);
+  assert.match(html, /Don’t wait for the draw/);
+  assert.match(html, /state\.country === "canada" \? "https:\/\/ca\.vessi\.com" : "https:\/\/vessi\.com"/);
+  assert.match(html, /addAttributionToUrl/);
+  assert.doesNotMatch(html, /discount|coupon|promo code/i);
+});
+
 test("question photography renders at its full source composition", () => {
   assert.match(styles, /\.question-accent\s*{[\s\S]*?aspect-ratio:\s*40\s*\/\s*11;[\s\S]*?height:\s*auto;/);
   assert.match(styles, /\.question-accent img\s*{[\s\S]*?object-fit:\s*contain;/);
