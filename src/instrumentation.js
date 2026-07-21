@@ -73,6 +73,13 @@ function loadScript(target, src, id) {
 export function createInstrumentation({ target = globalThis, config = {}, entry = {}, logger = null } = {}) {
   const onceEvents = new Set();
   let subscribedEmail = "";
+  const metaEvents = {
+    quiz_started: ["trackCustom", "QuizStarted"],
+    contact_submitted: ["track", "Lead"],
+    quiz_completed: ["track", "CompleteRegistration"],
+    result_viewed: ["track", "ViewContent"],
+    product_clicked: ["trackCustom", "ProductClicked"]
+  };
 
   function allowed() {
     return shopifyTrackingAllowed(target);
@@ -167,6 +174,11 @@ export function createInstrumentation({ target = globalThis, config = {}, entry 
     if (config.klaviyoCompanyId && allowed()) pushKlaviyo(["track", name, klaviyoProperties || safe]);
 
     if (allowed()) {
+      const metaEvent = metaEvents[name];
+      if (metaEvent && typeof target.fbq === "function") {
+        const { entry_id: _entryId, ...metaProperties } = safe;
+        target.fbq(metaEvent[0], metaEvent[1], metaProperties);
+      }
       if (target.Shopify) {
         if (typeof target.Shopify.analytics?.publish === "function") {
           const prefix = config.shopifyEventPrefix || "vessi_quiz";

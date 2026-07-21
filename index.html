@@ -1176,28 +1176,25 @@
 
       const products = {
         classic: {
-          name: "Women's Weekend Classic — Marble White",
-          short: "100% waterproof sneaker",
+          name: "Weekend Classic",
+          price: { us: "$150 USD", canada: "$150 CAD" },
+          search: "Weekend Classic",
           image: "img/weekend-classic.png",
-          lifestyle: "img/weekend-classic-lifestyle.jpg",
-          url: "https://vessi.com/products/womens-weekend-classic-marble-white",
-          cta: "Shop Weekend Classic"
+          lifestyle: "img/weekend-classic-lifestyle.jpg"
         },
         neo: {
-          name: "Men's Weekend Neo — Black/White",
-          short: "100% waterproof sneaker",
+          name: "Weekend Neo",
+          price: { us: "$160 USD", canada: "$160 CAD" },
+          search: "Weekend Neo",
           image: "img/weekend-neo.png",
-          lifestyle: "img/weekend-neo-lifestyle.jpg",
-          url: "https://vessi.com/products/mens-weekend-neo-black-white",
-          cta: "Shop Weekend Neo"
+          lifestyle: "img/weekend-neo-lifestyle.jpg"
         },
         slip: {
-          name: "Men's Weekend Slip-On — Black/White",
-          short: "100% waterproof sneaker",
+          name: "Weekend Slip-On",
+          price: { us: "$140 USD", canada: "$140 CAD" },
+          search: "Weekend Slip-On",
           image: "img/weekend-slip-on.png",
-          lifestyle: "img/brand-everyday.jpg",
-          url: "https://vessi.com/products/mens-weekend-slip-on-black-white",
-          cta: "Shop Weekend Slip-On"
+          lifestyle: "img/brand-everyday.jpg"
         }
       };
 
@@ -1239,7 +1236,8 @@
         if (!link) return;
         trackEvent("product_clicked", {
           section: link.dataset.trackSection || "",
-          text: link.dataset.trackText || link.textContent.trim()
+          text: link.dataset.trackText || link.textContent.trim(),
+          recommendation: link.dataset.recommendation || ""
         });
       });
 
@@ -1534,6 +1532,10 @@
         }
         state[config.bucket][config.key] = value;
         syncUpdate();
+        if (state.step === "contact_phone") {
+          analytics.identify({ email: state.contact.email, first_name: state.contact.first, last_name: state.contact.last });
+          trackEvent("contact_submitted", { role: state.role }, { once: true });
+        }
         pushStep(config.next);
       }
 
@@ -1623,10 +1625,11 @@
         state.consent_date = "";
         state.entry_completed_at = new Date().toISOString();
         const finalProfile = klaviyoProfile();
+        const recommendation = getRecommendation();
         analytics.identify(finalProfile);
         void quizSync.flush({ keepalive: true });
         progressBar.style.width = "100%";
-        analytics.track("quiz_completed", summary(), { once: true, klaviyoProperties: finalProfile });
+        analytics.track("quiz_completed", { ...summary(), recommendation: recommendation.product.name }, { once: true, klaviyoProperties: finalProfile });
         pushStep("results");
       }
 
@@ -1635,15 +1638,69 @@
         if (error) error.textContent = message;
       }
 
+      function getRecommendation() {
+        const featureKey = state.role === "teacher" ? "teacher_feature" : "student_feature";
+        const painKey = state.role === "teacher" ? "teacher_pain" : "student_pain";
+        const rainKey = state.role === "teacher" ? "teacher_rain" : "student_rain";
+        const feature = state.answers[featureKey] || {};
+        const pain = state.answers[painKey]?.value || "";
+        const rain = state.answers[rainKey]?.value || "";
+        let key = "classic";
+
+        if (["comfort", "breathable", "support"].includes(feature.value) || ["walks", "sore"].includes(pain)) key = "neo";
+        else if (feature.value === "versatile" || ["carry", "backup", "flats"].includes(pain) || ["backup", "flats"].includes(rain)) key = "slip";
+
+        const reasons = {
+          classic: "It’s our pick when waterproof performance and everyday style matter.",
+          neo: "It’s our pick for long days when breathable comfort matters.",
+          slip: "It’s our pick when you want one versatile pair for busy days."
+        };
+        return { key, product: products[key], featureLabel: feature.label || "a waterproof everyday shoe", reason: reasons[key] };
+      }
+
       function renderThankYou() {
         state.step = "results";
+        const recommendation = getRecommendation();
+        const product = recommendation.product;
+        const storeBase = state.country === "canada" ? "https://ca.vessi.com" : "https://vessi.com";
+        const shopUrl = addAttributionToUrl(`${storeBase}/search?q=${encodeURIComponent(product.search)}&type=product`, {
+          entry_id: quizSync.entry.entry_id,
+          utm_source: quizConfig.utmSource || "vessi_quiz",
+          utm_medium: quizConfig.utmMedium || "quiz",
+          utm_campaign: quizConfig.campaign || "bts-2026",
+          utm_content: `result-${recommendation.key}`,
+          affiliate_id: hidden.affiliate_id || "",
+          role: state.role,
+          recommendation: product.name
+        });
+        const price = product.price[state.country === "canada" ? "canada" : "us"];
         render({
-          title: "You're In",
-          prompt: "That’s it! You’ve been entered into the giveaway. Results will be sent via email on August 9th.",
-          body: `<div class="giveaway-details"><p>Send this link to any and all teachers in your life to give them a chance. The education center/institution with the most entries will get up to 50 pairs for their staff.</p></div>`,
-          actions: `<a class="primary" href="https://vessi.com/" data-track="cta_clicked" data-track-section="thank-you">Visit Vessi.com</a>`,
+          kicker: "You're In",
+          title: `Your Vessi match: ${product.name}`,
+          prompt: `You prioritized “${escapeHtml(recommendation.featureLabel)}.” ${recommendation.reason}`,
+          body: `
+            <div class="result-layout">
+              <div class="result-card">
+                <p class="result-eyebrow">Your recommended pair</p>
+                <p class="result-name">${product.name} · ${price}</p>
+                <ul class="benefit-list">
+                  <li>100% waterproof Dyma-tex® knit</li>
+                  <li>Breathable comfort for rainy days</li>
+                  <li>Comfortable for all-day wear</li>
+                </ul>
+                <p><strong>Don’t wait for the draw—shop your match now.</strong></p>
+                <a class="primary result-inline-cta" href="${shopUrl}" data-track="product_clicked" data-track-section="personalized-result" data-recommendation="${product.name}">Shop my Vessi match</a>
+                <p class="result-complete">That’s it! You’ve been entered into the giveaway. Results will be sent via email on August 9th.</p>
+              </div>
+              <div class="result-visuals">
+                <div class="result-card"><img class="product-art" src="${product.image}" alt="${product.name}" loading="eager" decoding="async"></div>
+              </div>
+            </div>
+          `,
           progress: 100,
-          onRendered() { trackEvent("result_viewed", summary(), { once: true }); }
+          onRendered() {
+            trackEvent("result_viewed", { recommendation: product.name, content_name: product.name, content_type: "product" }, { once: true });
+          }
         });
       }
 

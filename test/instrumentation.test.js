@@ -104,6 +104,29 @@ test("once events deduplicate while answers can track changes", () => {
   assert.deepEqual(target.dataLayer.map(({ event }) => event), ["quiz_viewed", "quiz_answered", "quiz_answered"]);
 });
 
+test("Meta Pixel receives a privacy-safe quiz conversion funnel", () => {
+  const calls = [];
+  const target = { dataLayer: [], fbq: (...args) => calls.push(args) };
+  const analytics = createInstrumentation({ target, config: { campaign: "bts-2026" }, entry: { entry_id: "entry-1" } });
+
+  analytics.track("quiz_started", { role: "student", email: "private@example.com" });
+  analytics.track("contact_submitted", { role: "student", school: "Private School" });
+  analytics.track("quiz_completed", { role: "student", recommendation: "Weekend Neo" });
+  analytics.track("result_viewed", { role: "student", recommendation: "Weekend Neo", content_name: "Weekend Neo" });
+  analytics.track("product_clicked", { role: "student", recommendation: "Weekend Neo" });
+
+  assert.deepEqual(calls.map(call => call.slice(0, 2)), [
+    ["trackCustom", "QuizStarted"],
+    ["track", "Lead"],
+    ["track", "CompleteRegistration"],
+    ["track", "ViewContent"],
+    ["trackCustom", "ProductClicked"]
+  ]);
+  assert.equal(JSON.stringify(calls).includes("private@example.com"), false);
+  assert.equal(JSON.stringify(calls).includes("Private School"), false);
+  assert.equal(JSON.stringify(calls).includes("entry-1"), false);
+});
+
 test("Shopify privacy denial blocks all adapters but safe dataLayer fallback works outside Shopify", () => {
   const denied = { dataLayer: [], _learnq: [], Shopify: { customerPrivacy: { analyticsProcessingAllowed: () => false }, analytics: { publish: () => assert.fail("must not publish") } } };
   const deniedAnalytics = createInstrumentation({ target: denied, config: { ga4MeasurementId: "G-X", klaviyoCompanyId: "K-X", klaviyoListId: "LIST" }, entry: { entry_id: "e" } });
