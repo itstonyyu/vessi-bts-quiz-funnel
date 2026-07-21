@@ -81,3 +81,11 @@ test("Typeform eligibility lists are exact", () => {
 test("Typeform legal destination is preserved", () => {
   assert.ok(html.includes("https://ca.vessi.com/pages/terms-conditions-teachers-giveaway-2023"));
 });
+
+test("giveaway terms are preselected without opting users into marketing", () => {
+  assert.match(html, /terms_initialized: false/);
+  assert.match(html, /if \(!state\.terms_initialized\) \{ state\.terms_accepted = true; state\.terms_initialized = true; syncUpdate\(\); \}/);
+  assert.match(html, /id="termsCheck"[^>]*\$\{state\.terms_accepted \? "checked" : ""\}/);
+  assert.match(html, /state\.marketing_consent = false/);
+  assert.doesNotMatch(html, /terms_initialized[\s\S]{0,200}marketing_consent = true/);
+});
