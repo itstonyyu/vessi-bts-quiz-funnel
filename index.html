@@ -1387,8 +1387,9 @@
         welcome() {
           render({ kicker: "Back-to-school giveaway", title: "We're giving away 200 Pairs of Vessis", prompt: "to teachers and students.", body: `
             <div class="giveaway-details">
-              <p>→ 1 Grand prize: Weekend Neo + Weekend Slip-On.</p>
-              <p>→ First 100 entries win a pair of Weekend Neos, 100 winners are chosen at random.</p>
+              <p>→ 1 Grand prize: Weekend Classics + Weekend Neo + Weekend Slip-On.</p>
+              <p>→ First 100 entries win a pair of Weekend Neos,</p>
+              <p>→ Another 100 winners will be randomly selected.</p>
             </div>`, actions: button("Enter to win", "start"), progress: 0 });
         },
         role() {
@@ -1451,7 +1452,7 @@
         terms() {
           if (!state.terms_initialized) { state.terms_accepted = true; state.terms_initialized = true; syncUpdate(); }
           render({
-          title: "Do you accept this Giveaway's <a href=\"https://ca.vessi.com/pages/terms-conditions-teachers-giveaway-2023\" target=\"_blank\" rel=\"noopener\">terms and conditions?</a>",
+          title: "Do you accept this Giveaway's <a href=\"https://ca.vessi.com/pages/terms-conditions-teachers-giveaway-2026\" target=\"_blank\" rel=\"noopener\">terms and conditions?</a>",
           body: `<label class="checkbox-row"><input id="termsCheck" type="checkbox" aria-describedby="formError" ${state.terms_accepted ? "checked" : ""}><span>I accept</span></label><p class="error" id="formError" role="alert" aria-live="polite"></p>`,
           actions: `${button("Submit", "results")}${button("Back", "back", "ghost")}`,
           onRendered() { document.getElementById("termsCheck")?.addEventListener("change", (event) => { state.terms_accepted = event.target.checked; syncUpdate(); }); }

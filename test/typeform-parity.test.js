@@ -7,8 +7,9 @@ const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const requiredCopy = [
   "We're giving away 200 Pairs of Vessis",
   "to teachers and students.",
-  "→ 1 Grand prize: Weekend Neo + Weekend Slip-On.",
-  "→ First 100 entries win a pair of Weekend Neos, 100 winners are chosen at random.",
+  "→ 1 Grand prize: Weekend Classics + Weekend Neo + Weekend Slip-On.",
+  "→ First 100 entries win a pair of Weekend Neos,",
+  "→ Another 100 winners will be randomly selected.",
   "Enter to win",
   "Are you a student or educator?",
   "Education professionals include daycare staff, teachers, tutors, TAs, and homeschool educators.",
@@ -78,8 +79,9 @@ test("Typeform eligibility lists are exact", () => {
   for (const territory of ["Northwest Territories", "Nunavut", "Yukon"]) assert.ok(html.includes(territory));
 });
 
-test("Typeform legal destination is preserved", () => {
-  assert.ok(html.includes("https://ca.vessi.com/pages/terms-conditions-teachers-giveaway-2023"));
+test("giveaway terms use the 2026 destination", () => {
+  assert.ok(html.includes("https://ca.vessi.com/pages/terms-conditions-teachers-giveaway-2026"));
+  assert.ok(!html.includes("terms-conditions-teachers-giveaway-2023"));
 });
 
 test("giveaway terms are preselected without opting users into marketing", () => {
